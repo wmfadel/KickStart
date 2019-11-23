@@ -9,6 +9,7 @@ import '../environment.dart';
 class CountriesProvider with ChangeNotifier {
   List<Country> _allCountries = [];
   List<Country> _selectedCountries = [];
+  bool isLoading = false;
 
   List<Country> get allCountries => [..._allCountries];
 
@@ -16,6 +17,7 @@ class CountriesProvider with ChangeNotifier {
 
   Future<bool> fetchAllCountries() async {
     if (_allCountries.length > 1) return true;
+
     http.Response response = await http.get(Environment.countriesUrl,
         headers: Environment.requestHeaders);
     Map<String, dynamic> res = json.decode(response.body);
@@ -26,15 +28,6 @@ class CountriesProvider with ChangeNotifier {
       if (country['country'] != 'Israel')
         _allCountries.add(Country.fromJson(country));
     });
-    // TODO delete this. checking for data
-    print('we got ${_allCountries.length} country');
-    print('request url: ${Environment.countriesUrl}');
-    print(
-        'first one: ${_allCountries[0].country} - ${_allCountries[0].code} - ${_allCountries[0].flag}');
-
-    for (int i = 0; i < _allCountries.length; i++) {
-      print('flag ${_allCountries[i].code}: ${_allCountries[i].flag}');
-    }
     return true;
   }
 
@@ -42,12 +35,14 @@ class CountriesProvider with ChangeNotifier {
     _selectedCountries.add(_allCountries.firstWhere((Country c) {
       return c.code == code;
     }));
+    notifyListeners();
   }
 
   removeFromFavorite(String code) {
     _selectedCountries.removeWhere((Country c) {
       return c.code == code;
     });
+    notifyListeners();
   }
 
   bool isFavorite(String code) {

@@ -10,6 +10,44 @@ class PickCountryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            elevation: 8,
+            expandedHeight: 220,
+            title: Text('Countries',style: TextStyle(color: Colors.black),),
+            actions: <Widget>[IconButton(icon: Icon(Icons.check,color: Colors.black,), onPressed: (){})],
+            floating: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title:Text('Select all countries that you\'r intresetd in',style: TextStyle(color: Colors.blue),),
+
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              ...List<int>.generate(20, (index) => index)
+                  .map((index) => Container(
+                height: 40,
+                margin: EdgeInsets.symmetric(vertical: 10),
+                color: Colors.grey[300],
+                alignment: Alignment.center,
+                child: Text('$index item'),
+              ))
+                  .toList(),
+            ]),
+
+
+          )
+        ],
+      ),
+    );
+  }
+}
+
+
+/*
+ return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
@@ -39,11 +77,12 @@ class PickCountryScreen extends StatelessWidget {
                 future:
                     Provider.of<CountriesProvider>(context,listen: false).fetchAllCountries(),
                 builder: (BuildContext context, snapshot) {
+                  print('FutureBuilder body called');
                   return snapshot.connectionState == ConnectionState.waiting
                       ? Center(
                           child: CircularProgressIndicator(),
                         )
-                      : Consumer(
+                      : snapshot.hasData && snapshot.data?Consumer(
                           builder: (BuildContext context,
                               CountriesProvider provider, Widget child) {
                             return Padding(
@@ -58,7 +97,7 @@ class PickCountryScreen extends StatelessWidget {
                               ),
                             );
                           },
-                        );
+                        ):Center(child: Text('error gettig countries data'),);
                 },
               ),
             ],
@@ -66,5 +105,4 @@ class PickCountryScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-}
+ */
