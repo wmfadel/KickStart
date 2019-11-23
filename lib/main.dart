@@ -17,10 +17,11 @@ class App extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData.light().copyWith(
+        theme: ThemeData(
+          primarySwatch: Colors.deepOrange,
           textTheme: TextTheme(
             title: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
               fontSize: 32,
               fontWeight: FontWeight.bold,
             ),

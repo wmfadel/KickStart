@@ -1,108 +1,94 @@
 import 'package:flutter/material.dart';
 import 'package:kick_start/models/country.dart';
 import 'package:kick_start/providers/countries_provider.dart';
+import 'package:kick_start/screens/home_screen.dart';
 import '../widgets/country_item.dart';
 import 'package:provider/provider.dart';
 
 class PickCountryScreen extends StatelessWidget {
   static final String routeName = '/';
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            elevation: 8,
-            expandedHeight: 220,
-            title: Text('Countries',style: TextStyle(color: Colors.black),),
-            actions: <Widget>[IconButton(icon: Icon(Icons.check,color: Colors.black,), onPressed: (){})],
-            floating: true,
+            expandedHeight: 200,
+            pinned: true,
+            actions: <Widget>[
+              Consumer<CountriesProvider>(
+                  builder: (ctx, provider, ch) => IconButton(
+                      icon: Icon(
+                        Icons.check,
+                        color: Colors.white,
+                      ),
+                      onPressed: provider.selectedCountries.length == 0
+                          ? _showErrorSnackBar
+                          : () {
+                              Navigator.of(context)
+                                  .pushReplacementNamed(HomePage.routeName);
+                            }))
+            ],
             flexibleSpace: FlexibleSpaceBar(
-              title:Text('Select all countries that you\'r intresetd in',style: TextStyle(color: Colors.blue),),
-
+              title: Text('Countries'),
+              background: Image.asset(
+                'assets/pics/back.png',
+                // <===   Add your own image to assets or use a .network image instead.
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           SliverList(
             delegate: SliverChildListDelegate([
-              ...List<int>.generate(20, (index) => index)
-                  .map((index) => Container(
-                height: 40,
-                margin: EdgeInsets.symmetric(vertical: 10),
-                color: Colors.grey[300],
-                alignment: Alignment.center,
-                child: Text('$index item'),
-              ))
-                  .toList(),
-            ]),
-
-
-          )
-        ],
-      ),
-    );
-  }
-}
-
-
-/*
- return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          primary: true,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              SizedBox(height: 220),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, bottom: 10),
-                child: Text(
-                  'Countries',
-                  style: Theme.of(context).textTheme.title,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 60, 25),
-                child: Text(
-                  'Select all countries that you\'r intresetd in',
-                  style: Theme.of(context).textTheme.body1,
-                ),
-              ),
-
               FutureBuilder(
-                future:
-                    Provider.of<CountriesProvider>(context,listen: false).fetchAllCountries(),
+                future: Provider.of<CountriesProvider>(context, listen: false)
+                    .fetchAllCountries(),
                 builder: (BuildContext context, snapshot) {
                   print('FutureBuilder body called');
                   return snapshot.connectionState == ConnectionState.waiting
                       ? Center(
                           child: CircularProgressIndicator(),
                         )
-                      : snapshot.hasData && snapshot.data?Consumer(
-                          builder: (BuildContext context,
-                              CountriesProvider provider, Widget child) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: provider.allCountries
-                                    .map((Country country) =>
-                                        CountryItem(country))
-                                    .toList(),
-                              ),
+                      : snapshot.hasData && snapshot.data
+                          ? Consumer(
+                              builder: (BuildContext context,
+                                  CountriesProvider provider, Widget child) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: provider.allCountries
+                                        .map((Country country) =>
+                                            CountryItem(country))
+                                        .toList(),
+                                  ),
+                                );
+                              },
+                            )
+                          : Center(
+                              child: Text('error getting countries data'),
                             );
-                          },
-                        ):Center(child: Text('error gettig countries data'),);
                 },
               ),
-            ],
-          ),
-        ),
+            ]),
+          )
+        ],
       ),
     );
- */
+  }
+
+  void _showErrorSnackBar() {
+    _scaffoldKey.currentState.hideCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+        backgroundColor: Colors.deepOrange,
+        content: const Text(
+          'You must select 1 or more countries',
+          style: TextStyle(color: Colors.white),
+        )));
+  }
+}
