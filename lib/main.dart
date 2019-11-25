@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
-import './providers/countries_provider.dart';
 import 'package:provider/provider.dart';
+
+import './providers/countries_provider.dart';
+import './providers/leagues_provider.dart';
+
 import './screens/pick_country_screen.dart';
 import './screens/home_screen.dart';
-
-void main() => runApp(App());
+void main() {
+ // Provider.debugCheckInvalidValueType = null;
+  runApp(App());
+}
 
 class App extends StatelessWidget {
+  final CountriesProvider _countriesProvider = CountriesProvider();
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          builder: (_) => CountriesProvider(),
+          builder: (_) => _countriesProvider,
         ),
+        ChangeNotifierProxyProvider<CountriesProvider, LeaguesProvider>(
+            // Dependency injection
+            builder: (context, country, oldLeagues) => LeaguesProvider(
+                country.selectedCountries,
+                oldLeagues == null ? [] : oldLeagues.leagues))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

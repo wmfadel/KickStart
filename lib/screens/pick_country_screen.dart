@@ -36,7 +36,6 @@ class PickCountryScreen extends StatelessWidget {
               title: Text('Countries'),
               background: Image.asset(
                 'assets/pics/back.png',
-                // <===   Add your own image to assets or use a .network image instead.
                 fit: BoxFit.cover,
               ),
             ),
