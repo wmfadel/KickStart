@@ -8,13 +8,20 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer<LeaguesProvider>(
-        builder: (ctx, provider, ch) => Column(
-          children: <Widget>[
-            ...provider.countries.map((c) => Text(c.country)).toList()
-          ],
-        ),
-      ),
+      body: FutureBuilder(
+        future: Provider.of<LeaguesProvider>(context,listen: false).fetchLeaguesByCountries(),
+        builder: (context, AsyncSnapshot<bool>snapshot){
+         return snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data
+              ?Consumer<LeaguesProvider>(
+           builder: (ctx, provider, ch) => Column(
+             children: <Widget>[
+               ...provider.leagues.map((l) => Text(l.name)).toList()
+             ],
+           ),
+         )
+        : Center(child: CircularProgressIndicator());
+        },
+      )
     );
   }
 }
