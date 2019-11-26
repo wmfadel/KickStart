@@ -7,6 +7,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(DateTime.now().toString());
     return Scaffold(
       body: FutureBuilder(
         future: Provider.of<LeaguesProvider>(context,listen: false).fetchLeaguesByCountries(),
