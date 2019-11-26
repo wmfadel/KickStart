@@ -16,8 +16,9 @@ class PickCountryScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            expandedHeight: 200,
+            expandedHeight: 300,
             pinned: true,
+            backgroundColor: Colors.deepOrange,
             actions: <Widget>[
               Consumer<CountriesProvider>(
                   builder: (ctx, provider, ch) => IconButton(
@@ -34,9 +35,13 @@ class PickCountryScreen extends StatelessWidget {
             ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text('Countries'),
-              background: Image.asset(
-                'assets/pics/back.png',
-                fit: BoxFit.cover,
+              background: Center(
+                child: Image.asset(
+                  'assets/pics/back.png',
+                  width: MediaQuery.of(context).size.width,
+                  height: 250,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
@@ -49,7 +54,10 @@ class PickCountryScreen extends StatelessWidget {
                   print('FutureBuilder body called');
                   return snapshot.connectionState == ConnectionState.waiting
                       ? Center(
-                          child: CircularProgressIndicator(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(30),
+                            child: CircularProgressIndicator(),
+                          ),
                         )
                       : snapshot.hasData && snapshot.data
                           ? Consumer(
@@ -70,7 +78,10 @@ class PickCountryScreen extends StatelessWidget {
                               },
                             )
                           : Center(
-                              child: Text('error getting countries data'),
+                              child: Padding(
+                                padding: const EdgeInsets.all(30),
+                                child: Text('error getting countries data'),
+                              ),
                             );
                 },
               ),

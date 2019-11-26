@@ -23,13 +23,13 @@ class _CountryItemState extends State<CountryItem> {
             splashColor: Colors.blueAccent,
             borderRadius: BorderRadius.circular(15),
             onTap: () {
-             // setState(() {
-                if (provider.isFavorite(widget._country.code)) {
-                  provider.removeFromFavorite(widget._country.code);
-                } else {
-                  provider.addToFavorite(widget._country.code);
-                }
-           //   });
+              // setState(() {
+              if (provider.isFavorite(widget._country.code)) {
+                provider.removeFromFavorite(widget._country.code);
+              } else {
+                provider.addToFavorite(widget._country.code);
+              }
+              //   });
             },
             child: Container(
               height: 60,
@@ -60,7 +60,9 @@ class _CountryItemState extends State<CountryItem> {
                   Flexible(
                     flex: 3,
                     child: Text(
-                      widget._country.country ?? 'Wolrd, World cup and stuff',
+                      widget._country.country == 'World'
+                          ? 'Wolrd, World cup and stuff'
+                          : widget._country.country,
                       style: Theme.of(context).textTheme.body2,
                     ),
                   ),
@@ -68,9 +70,18 @@ class _CountryItemState extends State<CountryItem> {
                     width: 20,
                     height: 60,
                     decoration: BoxDecoration(
-                        color: provider.isFavorite(widget._country.code)
-                            ? Colors.blueAccent
-                            : Colors.redAccent,
+                        gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: provider.isFavorite(widget._country.code)
+                                ? [
+                                    Colors.blueAccent.withOpacity(0.7),
+                                    Colors.blueAccent
+                                  ]
+                                : [
+                                    Colors.redAccent.withOpacity(0.7),
+                                    Colors.redAccent
+                                  ]),
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(15),
                           topRight: Radius.circular(15),
