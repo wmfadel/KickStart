@@ -5,7 +5,11 @@ import './providers/countries_provider.dart';
 import './providers/leagues_provider.dart';
 
 import './screens/pick_country_screen.dart';
+import './screens/pick_league_screen.dart';
 import './screens/home_screen.dart';
+
+
+
 void main() {
  // Provider.debugCheckInvalidValueType = null;
   runApp(App());
@@ -13,6 +17,7 @@ void main() {
 
 class App extends StatelessWidget {
   final CountriesProvider _countriesProvider = CountriesProvider();
+  final LeaguesProvider _leaguesProvider = LeaguesProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +26,10 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(
           builder: (_) => _countriesProvider,
         ),
-        ChangeNotifierProxyProvider<CountriesProvider, LeaguesProvider>(
-            // Dependency injection
-            builder: (context, country, oldLeagues) => LeaguesProvider(
-                country.selectedCountries,
-                oldLeagues == null ? [] : oldLeagues.leagues))
+        ChangeNotifierProvider(
+          builder: (_) => _leaguesProvider,
+        ),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -50,6 +54,7 @@ class App extends StatelessWidget {
         initialRoute: PickCountryScreen.routeName,
         routes: {
           PickCountryScreen.routeName: (context) => PickCountryScreen(),
+          PickLeagueScreen.routeName: (context) => PickLeagueScreen(),
           HomePage.routeName: (context) => HomePage(),
         },
       ),

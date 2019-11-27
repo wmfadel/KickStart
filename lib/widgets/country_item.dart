@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kick_start/providers/countries_provider.dart';
+import 'package:kick_start/providers/leagues_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../providers/countries_provider.dart';
+import '../screens/pick_league_screen.dart';
 import '../models/country.dart';
 
 class CountryItem extends StatefulWidget {
@@ -23,13 +25,8 @@ class _CountryItemState extends State<CountryItem> {
             splashColor: Colors.blueAccent,
             borderRadius: BorderRadius.circular(15),
             onTap: () {
-              // setState(() {
-              if (provider.isFavorite(widget._country.code)) {
-                provider.removeFromFavorite(widget._country.code);
-              } else {
-                provider.addToFavorite(widget._country.code);
-              }
-              //   });
+              Navigator.of(context).pushNamed(PickLeagueScreen.routeName,
+                  arguments: widget._country.code);
             },
             child: Container(
               height: 60,
@@ -66,27 +63,31 @@ class _CountryItemState extends State<CountryItem> {
                       style: Theme.of(context).textTheme.body2,
                     ),
                   ),
-                  Container(
-                    width: 20,
-                    height: 60,
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: provider.isFavorite(widget._country.code)
-                                ? [
-                                    Colors.blueAccent.withOpacity(0.7),
-                                    Colors.blueAccent
-                                  ]
-                                : [
-                                    Colors.redAccent.withOpacity(0.7),
-                                    Colors.redAccent
-                                  ]),
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                        )),
-                  )
+                  Consumer<LeaguesProvider>(builder: (BuildContext context,
+                      LeaguesProvider lProvider, Widget child) {
+                    return Container(
+                      width: 20,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: lProvider
+                                      .isLeagueFromCountry(widget._country.code)
+                                  ? [
+                                      Colors.blueAccent.withOpacity(0.7),
+                                      Colors.blueAccent
+                                    ]
+                                  : [
+                                      Colors.redAccent.withOpacity(0.7),
+                                      Colors.redAccent
+                                    ]),
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                          )),
+                    );
+                  }),
                 ],
               ),
             ),

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -10,17 +9,13 @@ import '../models/country.dart';
 
 class LeaguesProvider with ChangeNotifier {
   List<League> _leagues = [];
-  List<Country> _countries = [];
+
   // this will get wrong results for most of the year
   int _season = DateTime.now().year;
 
   List<League> get leagues => [..._leagues];
 
-  List<Country> get countries => [..._countries];
-
-  LeaguesProvider(this._countries, this._leagues);
-
-  Future<Void> _fetchCurrentSeason() async {
+  _fetchCurrentSeason() async {
     http.Response response = await http.get(Environment.seasonUrl,
         headers: Environment.requestHeaders);
     Map<String, dynamic> res = json.decode(response.body);
@@ -32,24 +27,48 @@ class LeaguesProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> fetchLeaguesByCountries() async {
+  Future<List<League>> fetchLeaguesByCountry(Country country) async {
     // check if we have the current season
     // if (_season == null) await _fetchCurrentSeason();
 
-    for (Country country in _countries) {
-      http.Response response = await http.get(
-          Environment.leaguesUrl + '${country.code}/$_season',
-          headers: Environment.requestHeaders);
-      print('request url' +
-          Environment.leaguesUrl +
-          '${country.code}/${DateTime.now().year}');
-      print(response.body.toString());
-      Map<String, dynamic> res = json.decode(response.body);
-      for (int i = 0; i < res['api']['leagues'].length; i++) {
-        _leagues.add(League.fromJson(res['api']['leagues'][i]));
-        print(_leagues[i].name);
-      }
+    http.Response response = await http.get(
+        Environment.leaguesUrl + '${country.code}/$_season',
+        headers: Environment.requestHeaders);
+    print('request url' +
+        Environment.leaguesUrl +
+        '${country.code}/${DateTime.now().year}');
+    print(response.body.toString());
+    Map<String, dynamic> res = json.decode(response.body);
+    List<League> _fetchedLeagues = [];
+    for (int i = 0; i < res['api']['leagues'].length; i++) {
+      _fetchedLeagues.add(League.fromJson(res['api']['leagues'][i]));
     }
-    return true;
+    return _fetchedLeagues;
+  }
+
+  addLeagueToFavorite(League league) {
+    _leagues.add(league);
+    notifyListeners();
+  }
+
+  removeLeagueFromFavorite(League league) {
+    _leagues.removeWhere((League l) => l.leagueId == league.leagueId);
+    notifyListeners();
+  }
+
+  isFavoriteLeague(int leagueId) {
+    bool isFavorite = false;
+    _leagues.forEach((League league) {
+      if (leagueId == league.leagueId) isFavorite = true;
+    });
+    return isFavorite;
+  }
+
+  isLeagueFromCountry(String countryCode) {
+    bool isFavorite = false;
+    _leagues.forEach((League league) {
+      if (league.countryCode == countryCode) isFavorite = true;
+    });
+    return isFavorite;
   }
 }

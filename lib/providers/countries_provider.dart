@@ -53,5 +53,9 @@ class CountriesProvider with ChangeNotifier {
     });
     return isFavorite;
   }
+
+  Country getCountryByCode(String code) {
+    return _allCountries.firstWhere((Country country) => country.code == code);
+  }
 }
 // https://www.api-football.com/documentation#documentation-v239-api-demo

@@ -1,3 +1,4 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:kick_start/models/country.dart';
 import 'package:kick_start/providers/countries_provider.dart';
@@ -63,6 +64,7 @@ class PickCountryScreen extends StatelessWidget {
                           ? Consumer(
                               builder: (BuildContext context,
                                   CountriesProvider provider, Widget child) {
+
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
@@ -77,10 +79,29 @@ class PickCountryScreen extends StatelessWidget {
                                 );
                               },
                             )
-                          : Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(30),
-                                child: Text('error getting countries data'),
+                          : Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 35),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'Can\'t get countries data, check your internet connection and try later',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(height: 30),
+                                  Container(
+                                    width: 300,
+                                    height: 300,
+                                    child: FlareActor(
+                                        "assets/flare/no_internet.flr",
+                                        alignment: Alignment.center,
+                                        fit: BoxFit.contain,
+                                        animation: "Untitled"),
+                                  ),
+                                ],
                               ),
                             );
                 },
