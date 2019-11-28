@@ -54,7 +54,7 @@ class _PickLeagueScreenState extends State<PickLeagueScreen> {
               ? ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) =>
-                      LeagueItem(snapshot.data[index]),
+                      LeagueItem(snapshot.data[index], isSelecting: true,),
                 )
               : Center(child: CircularProgressIndicator());
         },

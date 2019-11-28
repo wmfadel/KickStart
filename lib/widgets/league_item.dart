@@ -2,14 +2,16 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kick_start/providers/leagues_provider.dart';
+import 'package:kick_start/screens/league_details_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../models/league.dart';
 
 class LeagueItem extends StatelessWidget {
   final League _league;
+  final bool isSelecting;
 
-  LeagueItem(this._league);
+  LeagueItem(this._league, {this.isSelecting = false});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +21,18 @@ class LeagueItem extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          if (_leaguesProvider.isFavoriteLeague(_league.leagueId)) {
-            _leaguesProvider.removeLeagueFromFavorite(_league);
+          if (isSelecting) {
+            // this means we are in a page were user choose his favorite leagues
+            // and we should allow selection
+            if (_leaguesProvider.isFavoriteLeague(_league.leagueId)) {
+              _leaguesProvider.removeLeagueFromFavorite(_league);
+            } else {
+              _leaguesProvider.addLeagueToFavorite(_league);
+            }
           } else {
-            _leaguesProvider.addLeagueToFavorite(_league);
+            // selecting a league to view its details
+            Navigator.of(context).pushNamed(LeagueDetailsScreen.routeName,
+                arguments: _league.leagueId);
           }
         },
         borderRadius: BorderRadius.circular(10),
@@ -54,8 +64,12 @@ class LeagueItem extends StatelessWidget {
                         gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors:
-                          _leaguesProvider.isFavoriteLeague(_league.leagueId)
+                      colors: !isSelecting
+                          ? [
+                              Colors.deepOrange,
+                              Colors.deepOrange.withOpacity(0.3),
+                            ]
+                          : _leaguesProvider.isFavoriteLeague(_league.leagueId)
                               ? [
                                   Colors.blueAccent,
                                   Colors.blueAccent.withOpacity(0.6),

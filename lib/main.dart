@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kick_start/screens/league_details_screen.dart';
 import 'package:provider/provider.dart';
 
 import './providers/countries_provider.dart';
@@ -8,10 +9,8 @@ import './screens/pick_country_screen.dart';
 import './screens/pick_league_screen.dart';
 import './screens/home_screen.dart';
 
-
-
 void main() {
- // Provider.debugCheckInvalidValueType = null;
+  // Provider.debugCheckInvalidValueType = null;
   runApp(App());
 }
 
@@ -29,7 +28,6 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(
           builder: (_) => _leaguesProvider,
         ),
-
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -56,6 +54,7 @@ class App extends StatelessWidget {
           PickCountryScreen.routeName: (context) => PickCountryScreen(),
           PickLeagueScreen.routeName: (context) => PickLeagueScreen(),
           HomePage.routeName: (context) => HomePage(),
+          LeagueDetailsScreen.routeName: (context) => LeagueDetailsScreen(),
         },
       ),
     );

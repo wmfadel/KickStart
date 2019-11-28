@@ -71,4 +71,8 @@ class LeaguesProvider with ChangeNotifier {
     });
     return isFavorite;
   }
+
+  League getLeagueById(int leagueId) {
+    return _leagues.firstWhere((League league) => league.leagueId == leagueId);
+  }
 }
