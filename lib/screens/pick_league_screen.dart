@@ -5,18 +5,34 @@ import '../providers/countries_provider.dart';
 import '../providers/leagues_provider.dart';
 import 'package:provider/provider.dart';
 
-class PickLeagueScreen extends StatelessWidget {
+class PickLeagueScreen extends StatefulWidget {
   static final String routeName = '/pickleagues';
 
   @override
-  Widget build(BuildContext context) {
-    String selectedCountryCode =
-        ModalRoute.of(context).settings.arguments as String;
-    CountriesProvider _countriesProvider =
-        Provider.of<CountriesProvider>(context, listen: false);
-    LeaguesProvider _leaguesProvider =
-        Provider.of<LeaguesProvider>(context, listen: false);
+  _PickLeagueScreenState createState() => _PickLeagueScreenState();
+}
 
+class _PickLeagueScreenState extends State<PickLeagueScreen> {
+  CountriesProvider _countriesProvider;
+  LeaguesProvider _leaguesProvider;
+  String selectedCountryCode;
+  Future<List<League>> leagueFuture;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+
+    _countriesProvider = Provider.of<CountriesProvider>(context, listen: false);
+    _leaguesProvider = Provider.of<LeaguesProvider>(context, listen: false);
+    selectedCountryCode = ModalRoute.of(context).settings.arguments as String;
+    if (leagueFuture == null)
+      leagueFuture = _leaguesProvider.fetchLeaguesByCountry(
+          _countriesProvider.getCountryByCode(selectedCountryCode));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -32,17 +48,14 @@ class PickLeagueScreen extends StatelessWidget {
         ],
       ),
       body: FutureBuilder(
-        future: _leaguesProvider.fetchLeaguesByCountry(
-            _countriesProvider.getCountryByCode(selectedCountryCode)),
+        future: leagueFuture,
         builder: (BuildContext context, AsyncSnapshot<List<League>> snapshot) {
           return snapshot.connectionState == ConnectionState.done &&
                   snapshot.hasData
-              ? Consumer<LeaguesProvider>(
-                  builder: (ctx, provider, ch) => ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        LeagueItem(snapshot.data[index]),
-                  ),
+              ? ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      LeagueItem(snapshot.data[index]),
                 )
               : Center(child: CircularProgressIndicator());
         },

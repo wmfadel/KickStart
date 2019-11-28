@@ -2,13 +2,34 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:kick_start/models/country.dart';
 import 'package:kick_start/providers/countries_provider.dart';
+import 'package:kick_start/providers/leagues_provider.dart';
 import 'package:kick_start/screens/home_screen.dart';
 import '../widgets/country_item.dart';
 import 'package:provider/provider.dart';
 
-class PickCountryScreen extends StatelessWidget {
+class PickCountryScreen extends StatefulWidget {
   static final String routeName = '/';
+
+  @override
+  _PickCountryScreenState createState() => _PickCountryScreenState();
+}
+
+class _PickCountryScreenState extends State<PickCountryScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  CountriesProvider _countriesProvider;
+  LeaguesProvider _leaguesProvider;
+  Future countriesFuture;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    _countriesProvider = Provider.of<CountriesProvider>(context, listen: false);
+    _leaguesProvider = Provider.of<LeaguesProvider>(context, listen: false);
+
+    if (_countriesProvider.allCountries.length < 1)
+      countriesFuture = _countriesProvider.fetchAllCountries();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +42,17 @@ class PickCountryScreen extends StatelessWidget {
             pinned: true,
             backgroundColor: Colors.deepOrange,
             actions: <Widget>[
-              Consumer<CountriesProvider>(
-                  builder: (ctx, provider, ch) => IconButton(
-                      icon: Icon(
-                        Icons.check,
-                        color: Colors.white,
-                      ),
-                      onPressed: provider.selectedCountries.length == 0
-                          ? _showErrorSnackBar
-                          : () {
-                              Navigator.of(context)
-                                  .pushReplacementNamed(HomePage.routeName);
-                            }))
+              IconButton(
+                  icon: Icon(
+                    Icons.check,
+                    color: Colors.white,
+                  ),
+                  onPressed: _leaguesProvider.leagues.length == 0
+                      ? _showErrorSnackBar
+                      : () {
+                          Navigator.of(context)
+                              .pushReplacementNamed(HomePage.routeName);
+                        })
             ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text('Countries'),
@@ -49,10 +69,8 @@ class PickCountryScreen extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate([
               FutureBuilder(
-                future: Provider.of<CountriesProvider>(context, listen: false)
-                    .fetchAllCountries(),
+                future: countriesFuture,
                 builder: (BuildContext context, snapshot) {
-                  print('FutureBuilder body called');
                   return snapshot.connectionState == ConnectionState.waiting
                       ? Center(
                           child: Padding(
@@ -61,23 +79,16 @@ class PickCountryScreen extends StatelessWidget {
                           ),
                         )
                       : snapshot.hasData && snapshot.data
-                          ? Consumer(
-                              builder: (BuildContext context,
-                                  CountriesProvider provider, Widget child) {
-
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: provider.allCountries
-                                        .map((Country country) =>
-                                            CountryItem(country))
-                                        .toList(),
-                                  ),
-                                );
-                              },
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: _countriesProvider.allCountries
+                                    .map((Country country) =>
+                                        CountryItem(country))
+                                    .toList(),
+                              ),
                             )
                           : Padding(
                               padding: const EdgeInsets.symmetric(
@@ -118,7 +129,7 @@ class PickCountryScreen extends StatelessWidget {
     _scaffoldKey.currentState.showSnackBar(SnackBar(
         backgroundColor: Colors.deepOrange,
         content: const Text(
-          'You must select 1 or more countries',
+          'You must select 1 or more league to continue',
           style: TextStyle(color: Colors.white),
         )));
   }
