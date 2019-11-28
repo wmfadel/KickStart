@@ -10,25 +10,19 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(DateTime.now().toString());
+    LeaguesProvider _leagueProvider =
+        Provider.of<LeaguesProvider>(context, listen: false);
+
     return Scaffold(
-    /*  body: FutureBuilder(
-        future: Provider.of<LeaguesProvider>(context, listen: false)
-            .fetchLeaguesByCountry(Country()),
-        builder: (context, AsyncSnapshot<bool> snapshot) {
-          return snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData &&
-                  snapshot.data
-              ? Consumer<LeaguesProvider>(
-                  builder: (ctx, provider, ch) => ListView.builder(
-                    itemCount: provider.leagues.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        LeagueItem(provider.leagues[index]),
-                  ),
-                )
-              : Center(child: CircularProgressIndicator());
-        },
-      ),*/
+      appBar: AppBar(
+        title: Text('Followed Leagues'),
+        centerTitle: true,
+      ),
+      body: ListView.builder(
+        itemCount: _leagueProvider.leagues.length,
+        itemBuilder: (BuildContext context, int index) =>
+            LeagueItem(_leagueProvider.leagues[index]),
+      ),
     );
   }
 }
