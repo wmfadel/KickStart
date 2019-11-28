@@ -23,6 +23,7 @@ class StandingsProvider with ChangeNotifier {
 
     if (res['api']['results'] < 1) return false;
 
+    _standings.clear();
     for (var item in res['api']['standings'][0]) {
       _standings.add(Standings.fromJson(item));
     }
