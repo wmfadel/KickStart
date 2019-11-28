@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kick_start/providers/standings_provider.dart';
 import 'package:kick_start/screens/league_details_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,7 @@ void main() {
 class App extends StatelessWidget {
   final CountriesProvider _countriesProvider = CountriesProvider();
   final LeaguesProvider _leaguesProvider = LeaguesProvider();
+  final StandingsProvider _standingsProvider = StandingsProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,9 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           builder: (_) => _leaguesProvider,
+        ),
+        ChangeNotifierProvider(
+          builder: (_) => _standingsProvider,
         ),
       ],
       child: MaterialApp(
