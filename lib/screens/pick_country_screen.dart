@@ -22,7 +22,6 @@ class _PickCountryScreenState extends State<PickCountryScreen> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     _countriesProvider = Provider.of<CountriesProvider>(context, listen: false);
     _leaguesProvider = Provider.of<LeaguesProvider>(context, listen: false);
