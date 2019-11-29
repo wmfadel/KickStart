@@ -6,13 +6,14 @@ import '../models/standings.dart';
 
 class StandingsProvider with ChangeNotifier {
   List<Standings> _standings = [];
-  int _currentTeam=0;
+  int _currentTeam = 0;
 
   List<Standings> get standings => [..._standings];
+
   int get currentTeam => _currentTeam;
 
   Future<bool> fetchStandingsForLeague(int leagueId) async {
-   if(_currentTeam == leagueId) return true;
+    if (_currentTeam == leagueId) return true;
     _currentTeam = leagueId;
     http.Response response = await http.get(
         '${Environment.standingsUrl}/$leagueId',
@@ -29,5 +30,11 @@ class StandingsProvider with ChangeNotifier {
     }
     print('standings: ${_standings[0].teamName}');
     return true;
+  }
+
+  String getTamFlagById(int teamId) {
+    String flag;
+    flag = _standings.firstWhere((Standings s) => s.teamId == teamId).logo;
+    return flag;
   }
 }

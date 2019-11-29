@@ -33,5 +33,12 @@ class CountriesProvider with ChangeNotifier {
   Country getCountryByCode(String code) {
     return _allCountries.firstWhere((Country country) => country.code == code);
   }
+
+  String getFlagByName(String name){
+    String flag;
+    print('countries count ${_allCountries.length}');
+    flag = _allCountries.firstWhere((Country country)=>country.country==name).flag;
+    return flag;
+  }
 }
 // https://www.api-football.com/documentation#documentation-v239-api-demo

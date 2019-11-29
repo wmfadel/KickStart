@@ -39,7 +39,7 @@ class _PickCountryScreenState extends State<PickCountryScreen> {
           SliverAppBar(
             expandedHeight: 300,
             pinned: true,
-            backgroundColor: Colors.deepOrange,
+            backgroundColor: Colors.orange[800].withOpacity(0.96),
             actions: <Widget>[
               IconButton(
                   icon: Icon(
