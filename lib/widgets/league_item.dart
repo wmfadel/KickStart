@@ -99,7 +99,7 @@ class LeagueItem extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'Fromt:${_league.seasonStart}, To: ${_league.seasonEnd}',
+                          'From:${_league.seasonStart}, To: ${_league.seasonEnd}',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
