@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kick_start/providers/players_provider.dart';
 import 'package:kick_start/providers/standings_provider.dart';
 import 'package:kick_start/providers/teams_providers.dart';
+import 'package:kick_start/providers/fixtures_provider.dart';
 import 'package:kick_start/screens/league_details_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,7 @@ class App extends StatelessWidget {
   final LeaguesProvider _leaguesProvider = LeaguesProvider();
   final StandingsProvider _standingsProvider = StandingsProvider();
   final TeamsProvider _teamsProvider = TeamsProvider();
+  final FixturesProvider _fixturesProvider = FixturesProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,10 @@ class App extends StatelessWidget {
               oldPlayersProvider == null ? [] : oldPlayersProvider.topScorers,
               standingsProvider.fetchStandingsForLeague,
               standingsProvider.standings);
-        })
+        }),
+        ChangeNotifierProvider(
+          builder: (_) => _fixturesProvider,
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

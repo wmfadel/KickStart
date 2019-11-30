@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kick_start/providers/fixtures_provider.dart';
+import 'package:provider/provider.dart';
 import './league_day_matches_screen.dart';
 import './league_ranking_screen.dart';
 import './league_table_screen.dart';
@@ -25,6 +27,8 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
   LeagueTableScreen tableScreen;
   List<Widget> pages;
 
+  FixturesProvider _fixturesProvider;
+
   @override
   void initState() {
     super.initState();
@@ -37,40 +41,56 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _fixturesProvider = Provider.of<FixturesProvider>(context, listen: false);
+    _fixturesProvider.getPeriodicStream(972);
+    _fixturesProvider.fixturesStream.listen((data){
+      print(data[0].toString());
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageStorage(
-        bucket: storageBucket,
-        child: currentPage,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
+    return WillPopScope(
+      onWillPop: ()async{
+        _fixturesProvider.cancelFixturesTimer();
+        return true;
+      },
+      child: Scaffold(
+        body: PageStorage(
+          bucket: storageBucket,
+          child: currentPage,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+                backgroundColor: Colors.deepOrange,
+                icon: Icon(Icons.calendar_today),
+                title: Text('Today')),
+            BottomNavigationBarItem(
+                backgroundColor: Colors.deepOrange,
+                icon: Icon(Icons.equalizer),
+                title: Text('Ranking')),
+            BottomNavigationBarItem(
               backgroundColor: Colors.deepOrange,
-              icon: Icon(Icons.calendar_today),
-              title: Text('Today')),
-          BottomNavigationBarItem(
+              icon: Icon(Icons.supervisor_account),
+              title: Text('top scorers'),
+            ),
+            BottomNavigationBarItem(
               backgroundColor: Colors.deepOrange,
-              icon: Icon(Icons.equalizer),
-              title: Text('Ranking')),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.deepOrange,
-            icon: Icon(Icons.supervisor_account),
-            title: Text('top scorers'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.deepOrange,
-            icon: Icon(Icons.schedule),
-            title: Text('table'),
-          ),
-        ],
-        currentIndex: _navigationIndex,
-        onTap: (value) {
-          setState(() {
-            _navigationIndex = value;
-            currentPage = pages[_navigationIndex];
-          });
-        },
+              icon: Icon(Icons.schedule),
+              title: Text('table'),
+            ),
+          ],
+          currentIndex: _navigationIndex,
+          onTap: (value) {
+            setState(() {
+              _navigationIndex = value;
+              currentPage = pages[_navigationIndex];
+            });
+          },
+        ),
       ),
     );
   }

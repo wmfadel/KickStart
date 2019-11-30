@@ -24,17 +24,12 @@ class PlayersProvider with ChangeNotifier{
     final String url = '${Environment.topScorersUrl}/$leagueId';
     http.Response response = await http.get(url, headers: Environment.requestHeaders);
 
-    // Data Checking
-    print('scorers url: $url');
-    print('scorers response: ${response.body}');
-
     Map<String, dynamic> res = json.decode(response.body);
     if(res['api']['results'] < 1) return false;
     _topScorers.clear();
     for(var scorer in res['api']['topscorers'])
       _topScorers.add(Scorer.fromJson(scorer));
-
-    print('top scorer: ${_topScorers[0].playerName}');
+    
     return true;
 
   }

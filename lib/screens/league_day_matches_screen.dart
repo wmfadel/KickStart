@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kick_start/models/fixture.dart';
+import 'package:kick_start/providers/fixtures_provider.dart';
+import 'package:provider/provider.dart';
 
 class LeagueDayMatchesScreen extends StatefulWidget {
-
   final Key key;
+
   LeagueDayMatchesScreen(this.key) : super(key: key);
 
   @override
@@ -10,9 +13,38 @@ class LeagueDayMatchesScreen extends StatefulWidget {
 }
 
 class _LeagueDayMatchesScreenState extends State<LeagueDayMatchesScreen> {
+  FixturesProvider _fixturesProvider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _fixturesProvider = Provider.of<FixturesProvider>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('day matches'),);
+    return StreamBuilder<List<Fixture>>(
+      stream: _fixturesProvider.fixturesStream,
+      builder: (BuildContext context, AsyncSnapshot<List<Fixture>> snapshot) {
+        if (snapshot.hasError)
+          return Center(
+            child: Text('error'),
+          );
+        if (snapshot.hasData) {
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (BuildContext context, index) {
+              return ListTile(
+                title: Text(snapshot.data[index].homeTeam.teamName),
+              );
+            },
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator()
+          );
+        }
+      },
+    );
   }
 }
-
