@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kick_start/models/fixture.dart';
 import 'package:kick_start/providers/fixtures_provider.dart';
+import 'package:kick_start/providers/leagues_provider.dart';
 import 'package:provider/provider.dart';
 import './league_day_matches_screen.dart';
 import './league_ranking_screen.dart';
@@ -29,67 +31,79 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
 
   FixturesProvider _fixturesProvider;
 
-  @override
-  void initState() {
-    super.initState();
-    dayMatchesScreen = LeagueDayMatchesScreen(keyOne);
-    rankingScreen = LeagueRankingScreen(keyTwo);
-    topScorersScreen = LeagueTopScorersScreen(keyThree);
-    tableScreen = LeagueTableScreen(keyFour);
-    pages = [dayMatchesScreen, rankingScreen, topScorersScreen, tableScreen];
-    currentPage = pages[_navigationIndex];
-  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _fixturesProvider = Provider.of<FixturesProvider>(context, listen: false);
-    _fixturesProvider.getPeriodicStream(972);
-    _fixturesProvider.fixturesStream.listen((data){
-      print(data[0].toString());
-    });
+
+    // fetching selected league
+    int _leaagueId = ModalRoute.of(context).settings.arguments as int;
+
+    // initializing screens data
+    dayMatchesScreen = LeagueDayMatchesScreen(keyOne, _leaagueId);
+    rankingScreen = LeagueRankingScreen(keyTwo, _leaagueId);
+    topScorersScreen = LeagueTopScorersScreen(keyThree, _leaagueId);
+    tableScreen = LeagueTableScreen(keyFour);
+    pages = [dayMatchesScreen, rankingScreen, topScorersScreen, tableScreen];
+    currentPage = pages[_navigationIndex];
+
+    // creating streams for fixtures
+    _fixturesProvider = FixturesProvider();
+      _fixturesProvider.getPeriodicStream(_leaagueId);
+      _fixturesProvider.fixturesStream.listen((data){
+        print(data[0].toString());
+      });
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _fixturesProvider.stopFetchingFixtures();
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: ()async{
-        _fixturesProvider.cancelFixturesTimer();
+        _fixturesProvider.stopFetchingFixtures();
         return true;
       },
-      child: Scaffold(
-        body: PageStorage(
-          bucket: storageBucket,
-          child: currentPage,
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(
+      child: ChangeNotifierProvider(
+        builder: (_) =>_fixturesProvider,
+        child:  Scaffold(
+          body: PageStorage(
+            bucket: storageBucket,
+            child: currentPage,
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: [
+              BottomNavigationBarItem(
+                  backgroundColor: Colors.deepOrange,
+                  icon: Icon(Icons.calendar_today),
+                  title: Text('Today')),
+              BottomNavigationBarItem(
+                  backgroundColor: Colors.deepOrange,
+                  icon: Icon(Icons.equalizer),
+                  title: Text('Ranking')),
+              BottomNavigationBarItem(
                 backgroundColor: Colors.deepOrange,
-                icon: Icon(Icons.calendar_today),
-                title: Text('Today')),
-            BottomNavigationBarItem(
+                icon: Icon(Icons.supervisor_account),
+                title: Text('top scorers'),
+              ),
+              BottomNavigationBarItem(
                 backgroundColor: Colors.deepOrange,
-                icon: Icon(Icons.equalizer),
-                title: Text('Ranking')),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.deepOrange,
-              icon: Icon(Icons.supervisor_account),
-              title: Text('top scorers'),
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.deepOrange,
-              icon: Icon(Icons.schedule),
-              title: Text('table'),
-            ),
-          ],
-          currentIndex: _navigationIndex,
-          onTap: (value) {
-            setState(() {
-              _navigationIndex = value;
-              currentPage = pages[_navigationIndex];
-            });
-          },
+                icon: Icon(Icons.schedule),
+                title: Text('table'),
+              ),
+            ],
+            currentIndex: _navigationIndex,
+            onTap: (value) {
+              setState(() {
+                _navigationIndex = value;
+                currentPage = pages[_navigationIndex];
+              });
+            },
+          ),
         ),
       ),
     );

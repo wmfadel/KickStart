@@ -18,8 +18,7 @@ class StandingsProvider with ChangeNotifier {
     http.Response response = await http.get(
         '${Environment.standingsUrl}/$leagueId',
         headers: Environment.requestHeaders);
-    print('standings url: ${Environment.standingsUrl}/$leagueId');
-    print('standings response ${response.body.toString()}');
+
     Map<String, dynamic> res = json.decode(response.body);
 
     if (res['api']['results'] < 1) return false;
@@ -28,7 +27,7 @@ class StandingsProvider with ChangeNotifier {
     for (var item in res['api']['standings'][0]) {
       _standings.add(Standings.fromJson(item));
     }
-    print('standings: ${_standings[0].teamName}');
+
     return true;
   }
 

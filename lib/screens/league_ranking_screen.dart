@@ -9,28 +9,24 @@ import 'package:provider/provider.dart';
 
 class LeagueRankingScreen extends StatefulWidget {
   final Key key;
-
-  LeagueRankingScreen(this.key) : super(key: key);
+  final int leagueId;
+  LeagueRankingScreen(this.key, this.leagueId) : super(key: key);
 
   @override
   _LeagueRankingScreenState createState() => _LeagueRankingScreenState();
 }
 
 class _LeagueRankingScreenState extends State<LeagueRankingScreen> {
-  LeaguesProvider _leaguesProvider;
   StandingsProvider _standingsProvider;
-  League _league;
   Future<bool> standingsFuture;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _leaguesProvider = Provider.of<LeaguesProvider>(context);
-    _league = _leaguesProvider
-        .getLeagueById(ModalRoute.of(context).settings.arguments as int);
+
     _standingsProvider = Provider.of<StandingsProvider>(context);
     standingsFuture =
-        _standingsProvider.fetchStandingsForLeague(_league.leagueId);
+        _standingsProvider.fetchStandingsForLeague(widget.leagueId);
   }
 
   @override

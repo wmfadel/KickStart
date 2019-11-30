@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 class LeagueDayMatchesScreen extends StatefulWidget {
   final Key key;
-
-  LeagueDayMatchesScreen(this.key) : super(key: key);
+  final int leagueId;
+  LeagueDayMatchesScreen(this.key, this.leagueId) : super(key: key);
 
   @override
   _LeagueDayMatchesScreenState createState() => _LeagueDayMatchesScreenState();
@@ -30,7 +30,7 @@ class _LeagueDayMatchesScreenState extends State<LeagueDayMatchesScreen> {
           return Center(
             child: Text('error'),
           );
-        if (snapshot.hasData) {
+        if (snapshot.hasData && snapshot.data[0].leagueId==widget.leagueId) {
           return ListView.builder(
             itemCount: snapshot.data.length,
             itemBuilder: (BuildContext context, index) {
@@ -40,9 +40,7 @@ class _LeagueDayMatchesScreenState extends State<LeagueDayMatchesScreen> {
             },
           );
         } else {
-          return Center(
-            child: CircularProgressIndicator()
-          );
+          return Center(child: CircularProgressIndicator());
         }
       },
     );

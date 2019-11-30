@@ -10,32 +10,30 @@ import 'package:provider/provider.dart';
 
 class LeagueTopScorersScreen extends StatefulWidget {
   final Key key;
-
-  LeagueTopScorersScreen(this.key) : super(key: key);
+  final int leagueId;
+  LeagueTopScorersScreen(this.key, this.leagueId) : super(key: key);
 
   @override
   _LeagueTopScorersScreenState createState() => _LeagueTopScorersScreenState();
 }
 
 class _LeagueTopScorersScreenState extends State<LeagueTopScorersScreen> {
-  LeaguesProvider _leaguesProvider;
+
   StandingsProvider _standingsProvider;
   PlayersProvider _playersProvider;
   CountriesProvider _countriesProvider;
-  League _league;
+
   Future<bool> topScorersFuture;
 
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    _leaguesProvider = Provider.of<LeaguesProvider>(context);
-    _league = _leaguesProvider
-        .getLeagueById(ModalRoute.of(context).settings.arguments as int);
+
     _standingsProvider = Provider.of<StandingsProvider>(context);
     _playersProvider = Provider.of<PlayersProvider>(context);
     _countriesProvider = Provider.of<CountriesProvider>(context);
 
-    topScorersFuture = _playersProvider.fetchTopScorers(_league.leagueId);
+    topScorersFuture = _playersProvider.fetchTopScorers(widget.leagueId);
 
 //    if (_standingsProvider.standings.length == 0 ||
 //        _standingsProvider.currentTeam != _league.leagueId) {

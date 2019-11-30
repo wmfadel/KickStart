@@ -34,10 +34,6 @@ class LeaguesProvider with ChangeNotifier {
     http.Response response = await http.get(
         Environment.leaguesUrl + '${country.code}/$_season',
         headers: Environment.requestHeaders);
-    print('request url' +
-        Environment.leaguesUrl +
-        '${country.code}/${DateTime.now().year}');
-    print(response.body.toString());
     Map<String, dynamic> res = json.decode(response.body);
     List<League> _fetchedLeagues = [];
     for (int i = 0; i < res['api']['leagues'].length; i++) {
