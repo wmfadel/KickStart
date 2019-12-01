@@ -21,7 +21,6 @@ class _LeagueTopScorersScreenState extends State<LeagueTopScorersScreen> {
 
   StandingsProvider _standingsProvider;
   PlayersProvider _playersProvider;
-  CountriesProvider _countriesProvider;
 
   Future<bool> topScorersFuture;
 
@@ -31,7 +30,6 @@ class _LeagueTopScorersScreenState extends State<LeagueTopScorersScreen> {
 
     _standingsProvider = Provider.of<StandingsProvider>(context);
     _playersProvider = Provider.of<PlayersProvider>(context);
-    _countriesProvider = Provider.of<CountriesProvider>(context);
 
     topScorersFuture = _playersProvider.fetchTopScorers(widget.leagueId);
 

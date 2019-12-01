@@ -50,6 +50,8 @@ flutter:
   assets:
    - assets/pics/back.png
    - assets/flare/no_internet.flr
+   - assets/flare/empty.flr
+   - assets/flare/heart.flr
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

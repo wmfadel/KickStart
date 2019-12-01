@@ -18,7 +18,7 @@ class FixturesProvider with ChangeNotifier {
     var res = await fetchFixturesByLeague(leagueID);
     if (!res) _fixturesSubject.sink.addError('NoData, Fuck');
     if(!stop){
-      _fixturesTimer = Timer.periodic(Duration(seconds: 5), (_) async {
+      _fixturesTimer = Timer.periodic(Duration(seconds: 50), (_) async {
         print('calling stream time');
         var res = await fetchFixturesByLeague(leagueID);
         if (!res) _fixturesSubject.sink.addError('NoData, Fuck');
@@ -26,10 +26,10 @@ class FixturesProvider with ChangeNotifier {
     }
   }
 
-  fetchFixturesByLeague(int leagueId) async {
+  Future<bool> fetchFixturesByLeague(int leagueId) async {
     final date = DateTime.now();
     final url =
-        '${Environment.fixtureByLeagueUrl}/$leagueId/${date.year}-${date.month}-${date.day}';
+        '${Environment.fixtureByLeagueUrl}/$leagueId/${date.year}-${date.month}-${date.day}?timezone=Africa/Cairo';
     http.Response response =
         await http.get(url, headers: Environment.requestHeaders);
     Map<String, dynamic> res = json.decode(response.body);

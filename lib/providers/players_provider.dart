@@ -35,4 +35,10 @@ class PlayersProvider with ChangeNotifier{
   }
 
 
+  String getTamFlagById(int teamId) {
+    String flag;
+    flag = _standings.firstWhere((Standings s) => s.teamId == teamId).logo;
+    return flag;
+  }
+
 }
