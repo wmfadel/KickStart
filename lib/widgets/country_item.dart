@@ -50,6 +50,7 @@ class _CountryItemState extends State<CountryItem> {
                                 height: 60,
                                 width: 60,
                                 fit: BoxFit.cover,
+                          placeholderBuilder: (_)=>Placeholder(),
                               ),
                       ),
                     ),
@@ -79,8 +80,8 @@ class _CountryItemState extends State<CountryItem> {
                                       Colors.blueAccent
                                     ]
                                   : [
-                                      Colors.redAccent.withOpacity(0.7),
-                                      Colors.redAccent
+                                      Colors.deepOrange.withOpacity(0.7),
+                                      Colors.deepOrange
                                     ]),
                           borderRadius: BorderRadius.only(
                             bottomRight: Radius.circular(15),

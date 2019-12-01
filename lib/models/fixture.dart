@@ -56,8 +56,8 @@ class Fixture {
     awayTeam = json['awayTeam'] != null
         ? new HomeTeam.fromJson(json['awayTeam'])
         : null;
-    goalsHomeTeam = json['goalsHomeTeam'];
-    goalsAwayTeam = json['goalsAwayTeam'];
+    goalsHomeTeam = json['goalsHomeTeam']??0;
+    goalsAwayTeam = json['goalsAwayTeam']??0;
     score = json['score'] != null ? new Score.fromJson(json['score']) : null;
   }
 

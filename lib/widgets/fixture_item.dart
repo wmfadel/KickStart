@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kick_start/models/fixture.dart';
 import 'package:kick_start/widgets/fixture_slice.dart';
+
 class FixtureItem extends StatelessWidget {
   final Fixture fixture;
 
@@ -29,29 +30,96 @@ class FixtureItem extends StatelessWidget {
               FixtureSlice(),
               buildHomeTeam(_size),
               buildAwayTeam(_size),
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                  width: 40,
-                  height: 150,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Text('2'),
-                      Icon(Icons.more_vert),
-                      Text('2'),
-                    ],
-                  ),
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(100)),
-                ),
-              )
+              showScore(fixture.statusShort)
+                  ? buildScoreBoard(
+                      fixture.goalsHomeTeam, fixture.goalsAwayTeam)
+                  : buildStatusBar(_size),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Align buildStatusBar(Size _size) {
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        width: _size.width * 0.35,
+        height: fixture.statusShort == 'NS' ? 50 : 40,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(fixture.status, style: TextStyle(fontSize: 18),),
+              if (fixture.statusShort == 'NS')
+                Text('at:${fixture.eventDate.substring(11, 16)} GMT', style: TextStyle(fontSize: 16,color: Colors.white),)
+            ],
+          ),
+        ),
+        decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(100)),
+      ),
+    );
+  }
+
+  bool requiresStatus(String status) {
+    bool isRequired = false;
+    if (status == 'ET' || status == 'P') isRequired = true;
+    return isRequired;
+  }
+
+  bool showScore(String status) {
+    bool isOk = false;
+    switch (status) {
+      case '1H':
+      case 'HT':
+      case '2H':
+      case 'ET':
+      case 'P':
+      case 'FT':
+      case 'AET':
+      case 'PEN':
+      case 'BT':
+      case 'SUSP':
+        isOk = true;
+        break;
+    }
+    return isOk;
+  }
+
+  Align buildScoreBoard(int homeScore, int awayScore) {
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        width: 40,
+        height: 150,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Text(
+              '$homeScore',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+            requiresStatus(fixture.statusShort)
+                ? Tooltip(
+                message: fixture.status,
+                child: Text(fixture.statusShort))
+                : Icon(Icons.more_vert),
+            Text(
+              '$awayScore',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(100)),
       ),
     );
   }
@@ -66,13 +134,14 @@ class FixtureItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             FittedBox(
-                child: Text(
-              fixture.homeTeam.teamName,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold),
-            )),
+              child: Text(
+                fixture.homeTeam.teamName,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: fixture.homeTeam.teamName.length > 15 ? 16 : 22,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
             SizedBox(height: 15),
             Image.network(fixture.homeTeam.logo,
                 width: _size.width * 0.25, fit: BoxFit.cover)
@@ -99,7 +168,7 @@ class FixtureItem extends StatelessWidget {
               fixture.awayTeam.teamName,
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 22,
+                  fontSize: fixture.homeTeam.teamName.length > 15 ? 16 : 22,
                   fontWeight: FontWeight.bold),
             )),
           ],
