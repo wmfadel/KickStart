@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kick_start/providers/active_fixture_provider.dart';
 import 'package:kick_start/providers/players_provider.dart';
 import 'package:kick_start/providers/standings_provider.dart';
-import 'package:kick_start/providers/teams_providers.dart';
 import 'package:kick_start/providers/fixtures_provider.dart';
 import 'package:kick_start/screens/fixture_details.dart';
 import 'package:kick_start/screens/league_details_screen.dart';
@@ -24,7 +23,7 @@ class App extends StatelessWidget {
   final CountriesProvider _countriesProvider = CountriesProvider();
   final LeaguesProvider _leaguesProvider = LeaguesProvider();
   final StandingsProvider _standingsProvider = StandingsProvider();
-  final TeamsProvider _teamsProvider = TeamsProvider();
+
   final FixturesProvider _fixturesProvider = FixturesProvider();
   final ActiveFixtureProvider _activeFixtureProvider = ActiveFixtureProvider();
 
@@ -40,9 +39,6 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           builder: (_) => _standingsProvider,
-        ),
-        ChangeNotifierProvider(
-          builder: (_) => _teamsProvider,
         ),
         ChangeNotifierProxyProvider<StandingsProvider, PlayersProvider>(builder:
             (BuildContext context, StandingsProvider standingsProvider,

@@ -17,7 +17,6 @@ class FixtureItem extends StatelessWidget {
     Size _size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-     // TODO add Fixture to active fixture provider
         Provider.of<ActiveFixtureProvider>(context).currentFixtureAdd(fixture);
         Navigator.of(context)
             .pushNamed(FixtureDetails.routeName, arguments: fixture.fixtureId);

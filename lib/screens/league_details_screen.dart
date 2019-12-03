@@ -50,14 +50,10 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
     // creating streams for fixtures
     _fixturesProvider = FixturesProvider();
       _fixturesProvider.getPeriodicStream(_leaagueId);
-      _fixturesProvider.fixturesStream.listen((data){
-        print(data[0].toString());
-      });
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _fixturesProvider.stopFetchingFixtures();
   }
