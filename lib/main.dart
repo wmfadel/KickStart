@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kick_start/providers/active_fixture_provider.dart';
 import 'package:kick_start/providers/players_provider.dart';
 import 'package:kick_start/providers/standings_provider.dart';
 import 'package:kick_start/providers/teams_providers.dart';
 import 'package:kick_start/providers/fixtures_provider.dart';
+import 'package:kick_start/screens/fixture_details.dart';
 import 'package:kick_start/screens/league_details_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +26,7 @@ class App extends StatelessWidget {
   final StandingsProvider _standingsProvider = StandingsProvider();
   final TeamsProvider _teamsProvider = TeamsProvider();
   final FixturesProvider _fixturesProvider = FixturesProvider();
+  final ActiveFixtureProvider _activeFixtureProvider = ActiveFixtureProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +55,9 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(
           builder: (_) => _fixturesProvider,
         ),
+        ChangeNotifierProvider(
+          builder: (_) => _activeFixtureProvider,
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -79,6 +85,7 @@ class App extends StatelessWidget {
           PickLeagueScreen.routeName: (context) => PickLeagueScreen(),
           HomePage.routeName: (context) => HomePage(),
           LeagueDetailsScreen.routeName: (context) => LeagueDetailsScreen(),
+          FixtureDetails.routeName: (context) => FixtureDetails(),
         },
       ),
     );

@@ -9,19 +9,24 @@ import 'package:http/http.dart' as http;
 class FixturesProvider with ChangeNotifier {
   BehaviorSubject<List<Fixture>> _fixturesSubject =
       BehaviorSubject<List<Fixture>>();
+
   Timer _fixturesTimer;
   bool stop = false;
 
   Stream get fixturesStream => _fixturesSubject.stream;
 
+
   getPeriodicStream(int leagueID) async {
     var res = await fetchFixturesByLeague(leagueID);
-    if (!res) _fixturesSubject.sink.addError('NoData, Fuck');
-    if(!stop){
+    if (res == null || !res) {
+      _fixturesSubject.sink.addError('NoData');
+    }
+    if (!stop) {
       _fixturesTimer = Timer.periodic(Duration(seconds: 50), (_) async {
-        print('calling stream time');
         var res = await fetchFixturesByLeague(leagueID);
-        if (!res) _fixturesSubject.sink.addError('NoData, Fuck');
+        if (!res) {
+          _fixturesSubject.sink.addError('NoData');
+        }
       });
     }
   }
@@ -38,20 +43,14 @@ class FixturesProvider with ChangeNotifier {
     for (var item in res['api']['fixtures']) {
       _fixtures.add(Fixture.fromJson(item));
     }
-    if(!_fixturesSubject.isClosed)
-    _fixturesSubject.add(_fixtures);
+    if (!_fixturesSubject.isClosed) _fixturesSubject.add(_fixtures);
     return true;
-  }
-
-  bool isStreamOpen() {
-    return !_fixturesSubject.isClosed;
   }
 
   stopFetchingFixtures() {
     stop = true;
     _fixturesSubject.close();
-    if(_fixturesTimer != null)
-    _fixturesTimer.cancel();
+    if (_fixturesTimer != null) _fixturesTimer.cancel();
     _fixturesTimer = null;
   }
 }

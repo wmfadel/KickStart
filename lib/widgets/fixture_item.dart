@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kick_start/models/fixture.dart';
+import 'package:kick_start/providers/active_fixture_provider.dart';
+import 'package:kick_start/providers/fixtures_provider.dart';
+import 'package:kick_start/screens/fixture_details.dart';
 import 'package:kick_start/widgets/fixture_slice.dart';
+import 'package:provider/provider.dart';
 
 class FixtureItem extends StatelessWidget {
   final Fixture fixture;
@@ -11,30 +15,38 @@ class FixtureItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Material(
-        elevation: 8,
-        borderRadius: BorderRadius.circular(10),
-        clipBehavior: Clip.hardEdge,
-        child: Container(
-          width: _size.width,
-          height: 300,
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Colors.black.withOpacity(0.8), Colors.black])),
-          child: Stack(
-            children: <Widget>[
-              FixtureSlice(),
-              buildHomeTeam(_size),
-              buildAwayTeam(_size),
-              showScore(fixture.statusShort)
-                  ? buildScoreBoard(
-                      fixture.goalsHomeTeam, fixture.goalsAwayTeam)
-                  : buildStatusBar(_size),
-            ],
+    return GestureDetector(
+      onTap: () {
+     // TODO add Fixture to active fixture provider
+        Provider.of<ActiveFixtureProvider>(context).currentFixtureAdd(fixture);
+        Navigator.of(context)
+            .pushNamed(FixtureDetails.routeName, arguments: fixture.fixtureId);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Material(
+          elevation: 8,
+          borderRadius: BorderRadius.circular(10),
+          clipBehavior: Clip.hardEdge,
+          child: Container(
+            width: _size.width,
+            height: 300,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Colors.black.withOpacity(0.8), Colors.black])),
+            child: Stack(
+              children: <Widget>[
+                FixtureSlice(),
+                buildHomeTeam(_size),
+                buildAwayTeam(_size),
+                showScore(fixture.statusShort)
+                    ? buildScoreBoard(
+                        fixture.goalsHomeTeam, fixture.goalsAwayTeam)
+                    : buildStatusBar(_size),
+              ],
+            ),
           ),
         ),
       ),
@@ -51,9 +63,15 @@ class FixtureItem extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(fixture.status, style: TextStyle(fontSize: 18),),
+              Text(
+                fixture.status,
+                style: TextStyle(fontSize: 18),
+              ),
               if (fixture.statusShort == 'NS')
-                Text('at:${fixture.eventDate.substring(11, 16)} GMT', style: TextStyle(fontSize: 16,color: Colors.white),)
+                Text(
+                  '${fixture.eventDate.substring(11, 16)} GMT',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                )
             ],
           ),
         ),
@@ -66,7 +84,11 @@ class FixtureItem extends StatelessWidget {
 
   bool requiresStatus(String status) {
     bool isRequired = false;
-    if (status == 'ET' || status == 'P') isRequired = true;
+    if (status == 'ET' ||
+        status == 'P' ||
+        status == 'FT' ||
+        status == 'AET' ||
+        status == 'PEN') isRequired = true;
     return isRequired;
   }
 
@@ -107,8 +129,12 @@ class FixtureItem extends StatelessWidget {
             ),
             requiresStatus(fixture.statusShort)
                 ? Tooltip(
-                message: fixture.status,
-                child: Text(fixture.statusShort))
+                    message: fixture.status,
+                    child: Text(
+                      fixture.statusShort,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ))
                 : Icon(Icons.more_vert),
             Text(
               '$awayScore',
