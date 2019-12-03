@@ -11,6 +11,7 @@ class Fixture {
   String statusShort;
   int elapsed;
   String venue;
+  String referee;
   HomeTeam homeTeam;
   HomeTeam awayTeam;
   int goalsHomeTeam;
@@ -30,6 +31,7 @@ class Fixture {
         this.statusShort,
         this.elapsed,
         this.venue,
+        this.referee,
         this.homeTeam,
         this.awayTeam,
         this.goalsHomeTeam,
@@ -50,6 +52,7 @@ class Fixture {
     statusShort = json['statusShort'];
     elapsed = json['elapsed'];
     venue = json['venue'];
+    venue = json['referee'];
     homeTeam = json['homeTeam'] != null
         ? new HomeTeam.fromJson(json['homeTeam'])
         : null;
@@ -77,6 +80,7 @@ class Fixture {
     data['statusShort'] = this.statusShort;
     data['elapsed'] = this.elapsed;
     data['venue'] = this.venue;
+    data['referee'] = this.referee;
     if (this.homeTeam != null) {
       data['homeTeam'] = this.homeTeam.toJson();
     }
