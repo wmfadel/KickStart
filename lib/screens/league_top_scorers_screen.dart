@@ -1,9 +1,6 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:kick_start/models/league.dart';
 import 'package:kick_start/models/scorer.dart';
-import 'package:kick_start/providers/countries_provider.dart';
-import 'package:kick_start/providers/leagues_provider.dart';
 import 'package:kick_start/providers/players_provider.dart';
 import 'package:kick_start/providers/standings_provider.dart';
 import 'package:provider/provider.dart';

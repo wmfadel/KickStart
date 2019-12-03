@@ -1,8 +1,6 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:kick_start/models/league.dart';
 import 'package:kick_start/models/standings.dart';
-import 'package:kick_start/providers/leagues_provider.dart';
 import 'package:kick_start/providers/standings_provider.dart';
 import 'package:kick_start/widgets/forme_row.dart';
 import 'package:provider/provider.dart';

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kick_start/models/fixture.dart';
 import 'package:kick_start/providers/fixtures_provider.dart';
-import 'package:kick_start/providers/leagues_provider.dart';
 import 'package:provider/provider.dart';
+
 import './league_day_matches_screen.dart';
 import './league_ranking_screen.dart';
 import './league_table_screen.dart';

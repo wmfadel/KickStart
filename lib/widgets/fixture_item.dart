@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kick_start/models/fixture.dart';
 import 'package:kick_start/providers/active_fixture_provider.dart';
-import 'package:kick_start/providers/fixtures_provider.dart';
 import 'package:kick_start/screens/fixture_details.dart';
 import 'package:kick_start/widgets/fixture_slice.dart';
 import 'package:provider/provider.dart';

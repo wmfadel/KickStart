@@ -4,7 +4,7 @@ class FixtureSlice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipPath(
-      clipper: mCustomClipper(),
+      clipper: ChipCustomClipper(),
       child: Container(
         height: 400,
         width: MediaQuery.of(context).size.width,
@@ -16,7 +16,7 @@ class FixtureSlice extends StatelessWidget {
   }
 }
 
-class mCustomClipper extends CustomClipper<Path> {
+class ChipCustomClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     Path path = Path();
