@@ -4,24 +4,46 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kick_start/environment.dart';
 import 'package:kick_start/models/fixture.dart';
+import 'package:kick_start/models/statistics.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ActiveFixtureProvider with ChangeNotifier {
   BehaviorSubject<Fixture> _currentFixtureSubject = BehaviorSubject<Fixture>();
+  BehaviorSubject<Statistics> _currentFixtureStatistics =
+      BehaviorSubject<Statistics>();
+
   Timer _dataTimer;
+  DateTime _statisticsTime;
 
   Stream get currentFixtureStream => _currentFixtureSubject.stream;
+
   get currentFixtureAdd => _currentFixtureSubject.sink.add;
 
-  refreshActiveFixture() {
-    if(_dataTimer == null || !_dataTimer.isActive)
+  Stream get currentStatisticsStream => _currentFixtureStatistics.stream;
 
-    _dataTimer = Timer.periodic(Duration(seconds: 15), (_) async {
-      var res = await _fetchFixtureByID(_currentFixtureSubject.value.fixtureId);
-      if (!res) {
-        _currentFixtureSubject.sink.addError('NoData');
+  ActiveFixtureProvider() {
+    _currentFixtureSubject.stream.listen((Fixture fixture) async {
+      // check if we will fetch statistics
+      if (!_currentFixtureStatistics.hasValue ||
+          _currentFixtureStatistics.value.id ==
+              _currentFixtureSubject.value.fixtureId) {
+        await _fetchStatistics();
+      } else if (DateTime.now().difference(_statisticsTime) >=
+          Duration(minutes: 5)) {
+        await _fetchStatistics();
       }
     });
+  }
+
+  refreshActiveFixture() {
+    if (_dataTimer == null || !_dataTimer.isActive)
+      _dataTimer = Timer.periodic(Duration(seconds: 15), (_) async {
+        var res =
+            await _fetchFixtureByID(_currentFixtureSubject.value.fixtureId);
+        if (!res) {
+          _currentFixtureSubject.sink.addError('NoData');
+        }
+      });
   }
 
   Future<bool> _fetchFixtureByID(int fixtureId) async {
@@ -32,7 +54,28 @@ class ActiveFixtureProvider with ChangeNotifier {
     if (res['api']['results'] < 1) return false;
     if (!_currentFixtureSubject.isClosed)
       _currentFixtureSubject.add(Fixture.fromJson(res['api']['fixtures'][0]));
-   // print('getting this ${_currentFixtureSubject.value.homeTeam.teamName}');
+    // print('getting this ${_currentFixtureSubject.value.homeTeam.teamName}');
     return true;
+  }
+
+  _fetchStatistics() async {
+    final int id = _currentFixtureSubject.value.fixtureId;
+    final String url = '${Environment.statisticsById}/$id';
+    http.Response response =
+        await http.get(url, headers: Environment.requestHeaders);
+
+    // TODO delete next 2 lines
+    print('statistics url: $url');
+    print('statistics response ${response.body}');
+
+    Map<String, dynamic> res = json.decode(response.body);
+    if (res['api']['results'] < 1)
+      _currentFixtureStatistics.addError('Statisrics are not available now');
+
+    Statistics statistics = Statistics.fromJson(res['api']['statistics']);
+    statistics.id = id;
+    print(statistics.toString());
+    _currentFixtureStatistics.add(statistics);
+    _statisticsTime = DateTime.now();
   }
 }

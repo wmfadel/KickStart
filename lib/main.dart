@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:kick_start/providers/active_fixture_provider.dart';
-import 'package:kick_start/providers/players_provider.dart';
-import 'package:kick_start/providers/standings_provider.dart';
-import 'package:kick_start/providers/fixtures_provider.dart';
-import 'package:kick_start/screens/fixture_details.dart';
-import 'package:kick_start/screens/league_details_screen.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import './providers/countries_provider.dart';
 import './providers/leagues_provider.dart';
+import './providers/active_fixture_provider.dart';
+import './providers/players_provider.dart';
+import './providers/standings_provider.dart';
+import './providers/fixtures_provider.dart';
+
 
 import './screens/pick_country_screen.dart';
 import './screens/pick_league_screen.dart';
 import './screens/home_screen.dart';
+import './screens/fixture_details.dart';
+import './screens/league_details_screen.dart';
 
 void main() {
   // Provider.debugCheckInvalidValueType = null;
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(App());
 }
 

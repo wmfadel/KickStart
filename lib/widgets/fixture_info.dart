@@ -14,7 +14,7 @@ class FixtureInfo extends StatelessWidget {
         children: <Widget>[
           SizedBox(height: 10),
           dataRow('League', fixture.league.name, Icons.star),
-          dataRow('Venue', fixture.venue, Icons.location_on),
+          dataRow('Venue', fixture.venue??'Unknown', Icons.location_on),
           dataRow('Date', fixture.eventDate.substring(0,10), Icons.date_range),
           dataRow('Time',fixture.eventDate.substring(11,19) + ' GMT', Icons.av_timer),
           dataRow('Elapsed','${fixture.elapsed??0}' + ' M', Icons.timer),
@@ -61,14 +61,4 @@ class FixtureInfo extends StatelessWidget {
     );
   }
 }
-/*
 
- Row(
-                  children: <Widget>[
-                    Icon(Icons.location_on,color: Colors.deepOrangeAccent,),
-                    Text('Venue',style: TextStyle(color: Colors.black),),
-                  ],
-                )
-
-                 Text(fixture.venue,style: TextStyle(color: Colors.black),)
- */
