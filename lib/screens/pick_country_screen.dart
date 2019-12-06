@@ -26,8 +26,12 @@ class _PickCountryScreenState extends State<PickCountryScreen> {
     _countriesProvider = Provider.of<CountriesProvider>(context, listen: false);
     _leaguesProvider = Provider.of<LeaguesProvider>(context, listen: false);
 
-    if (_countriesProvider.allCountries.length < 1)
+    if (_countriesProvider.allCountries.length < 1){
       countriesFuture = _countriesProvider.fetchAllCountries();
+    }else{
+      countriesFuture = Future.value(true);
+    }
+
   }
 
   @override

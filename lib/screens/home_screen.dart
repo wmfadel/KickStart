@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kick_start/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/leagues_provider.dart';
@@ -17,6 +18,7 @@ class HomePage extends StatelessWidget {
         title: Text('Followed Leagues'),
         centerTitle: true,
       ),
+      drawer:AppDrawer(),
       body: ListView.builder(
         itemCount: _leagueProvider.leagues.length,
         itemBuilder: (BuildContext context, int index) =>
