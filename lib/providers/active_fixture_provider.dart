@@ -22,15 +22,15 @@ class ActiveFixtureProvider with ChangeNotifier {
   Stream get currentStatisticsStream => _currentFixtureStatistics.stream;
 
   ActiveFixtureProvider() {
-    _currentFixtureSubject.stream.listen((Fixture fixture) async {
+    _currentFixtureSubject.stream.listen((Fixture fixture) {
       // check if we will fetch statistics
+
       if (!_currentFixtureStatistics.hasValue ||
-          _currentFixtureStatistics.value.id ==
-              _currentFixtureSubject.value.fixtureId) {
-        await _fetchStatistics();
-      } else if (DateTime.now().difference(_statisticsTime) >=
-          Duration(minutes: 5)) {
-        await _fetchStatistics();
+          _currentFixtureStatistics.value.id !=
+              fixture.fixtureId ||
+          _statisticsTime == null||
+          DateTime.now().difference(_statisticsTime).inMinutes >= 5) {
+        _fetchStatistics();
       }
     });
   }
@@ -61,20 +61,18 @@ class ActiveFixtureProvider with ChangeNotifier {
   _fetchStatistics() async {
     final int id = _currentFixtureSubject.value.fixtureId;
     final String url = '${Environment.statisticsById}/$id';
+//    final String url = '${Environment.statisticsById}/157163';
     http.Response response =
         await http.get(url, headers: Environment.requestHeaders);
 
-    // TODO delete next 2 lines
-    print('statistics url: $url');
-    print('statistics response ${response.body}');
-
     Map<String, dynamic> res = json.decode(response.body);
-    if (res['api']['results'] < 1)
+    if (res['api']['results'] < 1) {
       _currentFixtureStatistics.addError('Statisrics are not available now');
-
+      _statisticsTime = DateTime.now();
+      return;
+    }
     Statistics statistics = Statistics.fromJson(res['api']['statistics']);
     statistics.id = id;
-    print(statistics.toString());
     _currentFixtureStatistics.add(statistics);
     _statisticsTime = DateTime.now();
   }

@@ -25,7 +25,9 @@ class _FixtureDetailsState extends State<FixtureDetails> {
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
+    size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       body: StreamBuilder<Fixture>(
         stream: _activeFixtureProvider.currentFixtureStream,
@@ -34,8 +36,8 @@ class _FixtureDetailsState extends State<FixtureDetails> {
           return snapShot.hasData
               ? buildDataBody(snapShot.data)
               : Center(
-                  child: CircularProgressIndicator(),
-                );
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );
@@ -82,7 +84,7 @@ class _FixtureDetailsState extends State<FixtureDetails> {
                   Container(
                     child: Text("Articles Body"),
                   ),
-                  FixtureStatistics(fixture),
+                  FixtureStatistics(),
                   FixtureInfo(fixture),
                 ]),
               ),
