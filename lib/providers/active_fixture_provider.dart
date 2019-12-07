@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kick_start/environment.dart';
 import 'package:kick_start/models/fixture.dart';
+import 'package:kick_start/models/formation.dart';
 import 'package:kick_start/models/statistics.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -11,6 +12,8 @@ class ActiveFixtureProvider with ChangeNotifier {
   BehaviorSubject<Fixture> _currentFixtureSubject = BehaviorSubject<Fixture>();
   BehaviorSubject<Statistics> _currentFixtureStatistics =
       BehaviorSubject<Statistics>();
+  BehaviorSubject<Formation> _currentFixtureFormation =
+      BehaviorSubject<Formation>();
 
   Timer _dataTimer;
   DateTime _statisticsTime;
@@ -21,17 +24,23 @@ class ActiveFixtureProvider with ChangeNotifier {
 
   Stream get currentStatisticsStream => _currentFixtureStatistics.stream;
 
+  Stream get currentFormationStream => _currentFixtureFormation.stream;
+
   ActiveFixtureProvider() {
     _currentFixtureSubject.stream.listen((Fixture fixture) {
       // check if we will fetch statistics
-
       if (!_currentFixtureStatistics.hasValue ||
-          _currentFixtureStatistics.value.id !=
-              fixture.fixtureId ||
-          _statisticsTime == null||
+          _currentFixtureStatistics.value.id != fixture.fixtureId ||
+          _statisticsTime == null ||
           DateTime.now().difference(_statisticsTime).inMinutes >= 5) {
         _fetchStatistics();
       }
+
+      // fetching formation
+
+      if (!_currentFixtureFormation.hasValue ||
+          _currentFixtureFormation.value.id != fixture.fixtureId)
+        fetchFormation();
     });
   }
 
@@ -75,5 +84,31 @@ class ActiveFixtureProvider with ChangeNotifier {
     statistics.id = id;
     _currentFixtureStatistics.add(statistics);
     _statisticsTime = DateTime.now();
+  }
+
+  fetchFormation() async {
+    final int id = _currentFixtureSubject.value.fixtureId;
+   // final String url = Environment.lineupsUrl + '/$id';
+    final String url = Environment.lineupsUrl + '/157163';
+    final http.Response response =
+        await http.get(url, headers: Environment.requestHeaders);
+
+    // TODO delete next 2 lines
+    print('formation url: $url');
+    print('formation response: ${response.body}');
+
+    Map<String, dynamic> res = json.decode(response.body);
+    if (res['api']['results'] < 1) {
+      _currentFixtureFormation.addError('not reay yet');
+      return;
+    }
+
+    Formation _formation = Formation.fromJson(
+        res['api']['lineUps'],
+        _currentFixtureSubject.value.homeTeam.teamName,
+        _currentFixtureSubject.value.awayTeam.teamName);
+    _formation.id = id;
+    print(_formation.toString());
+    _currentFixtureFormation.add(_formation);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kick_start/models/fixture.dart';
 import 'package:kick_start/providers/active_fixture_provider.dart';
+import 'package:kick_start/widgets/fixture_formation.dart';
 import 'package:kick_start/widgets/fixture_info.dart';
 import 'package:kick_start/widgets/fixture_statistics.dart';
 import 'package:provider/provider.dart';
@@ -81,9 +82,7 @@ class _FixtureDetailsState extends State<FixtureDetails> {
                   Container(
                     child: Text("Home Body"),
                   ),
-                  Container(
-                    child: Text("Articles Body"),
-                  ),
+                 FixtureFormation(),
                   FixtureStatistics(),
                   FixtureInfo(fixture),
                 ]),
