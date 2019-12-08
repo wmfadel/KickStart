@@ -1,30 +1,31 @@
 class Formation {
-  CrystalPalace homeTeam;
-  CrystalPalace awayTeam;
+  TeamData homeTeam;
+  TeamData awayTeam;
   int id;
 
   Formation({this.homeTeam, this.awayTeam});
 
   Formation.fromJson(Map<String, dynamic> json, String home, String away) {
+
     homeTeam = json[home] != null
-        ? new CrystalPalace.fromJson(json[home])
+        ? new TeamData.fromJson(json[home])
         : null;
     awayTeam = json[away] != null
-        ? new CrystalPalace.fromJson(json[away])
+        ? new TeamData.fromJson(json[away])
         : null;
   }
 
 }
 
-class CrystalPalace {
+class TeamData {
   String formation;
   List<StartXI> startXI;
   List<StartXI> substitutes;
   String coach;
 
-  CrystalPalace({this.formation, this.startXI, this.substitutes, this.coach});
+  TeamData({this.formation, this.startXI, this.substitutes, this.coach});
 
-  CrystalPalace.fromJson(Map<String, dynamic> json) {
+  TeamData.fromJson(Map<String, dynamic> json) {
     formation = json['formation'];
     if (json['startXI'] != null) {
       startXI = new List<StartXI>();

@@ -110,13 +110,11 @@ class _FixtureDetailsState extends State<FixtureDetails> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: Image.network(
+               Image.network(
                     fixture.homeTeam.logo,
                     width: size.width * 0.2,
                     fit: BoxFit.cover,
-                  ),
+
                 ),
                 FittedBox(
                   child: Text(
@@ -164,13 +162,11 @@ class _FixtureDetailsState extends State<FixtureDetails> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: Image.network(
+                Image.network(
                     fixture.awayTeam.logo,
                     width: size.width * 0.2,
                     fit: BoxFit.cover,
-                  ),
+
                 ),
                 FittedBox(
                   child: Padding(
