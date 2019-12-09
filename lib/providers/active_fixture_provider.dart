@@ -45,10 +45,10 @@ class ActiveFixtureProvider with ChangeNotifier {
       if (!_currentFixtureFormation.hasValue ||
           _currentFixtureFormation.value.id != fixture.fixtureId)
         fetchFormation();
-    });
 
-    // fetch events without any conditions
-    fetchEvents();
+      // fetch events without any conditions
+      fetchEvents();
+    });
   }
 
   refreshActiveFixture() {
@@ -119,12 +119,13 @@ class ActiveFixtureProvider with ChangeNotifier {
   }
 
   fetchEvents() async {
+    print('fetching events');
     final int id = _currentFixtureSubject.value.fixtureId;
     //final int id = 157163;
     final String url = Environment.eventsUrl + '/$id';
+
     http.Response response =
         await http.get(url, headers: Environment.requestHeaders);
-
 
     Map<String, dynamic> res = json.decode(response.body);
     if (res['api']['results'] < 1) {

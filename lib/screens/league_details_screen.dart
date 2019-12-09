@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import './league_day_matches_screen.dart';
 import './league_ranking_screen.dart';
-import './league_table_screen.dart';
 import './league_top_scorers_screen.dart';
 
 class LeagueDetailsScreen extends StatefulWidget {
@@ -18,14 +17,12 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
   final PageStorageKey keyOne = PageStorageKey('leaguDayMatches');
   final PageStorageKey keyTwo = PageStorageKey('leagueRanking');
   final PageStorageKey keyThree = PageStorageKey('leagueTopScorers');
-  final PageStorageKey keyFour = PageStorageKey('leagueTable');
   final PageStorageBucket storageBucket = PageStorageBucket();
   int _navigationIndex = 0;
   Widget currentPage;
   LeagueDayMatchesScreen dayMatchesScreen;
   LeagueRankingScreen rankingScreen;
   LeagueTopScorersScreen topScorersScreen;
-  LeagueTableScreen tableScreen;
   List<Widget> pages;
 
   FixturesProvider _fixturesProvider;
@@ -42,8 +39,7 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
     dayMatchesScreen = LeagueDayMatchesScreen(keyOne, _leaagueId);
     rankingScreen = LeagueRankingScreen(keyTwo, _leaagueId);
     topScorersScreen = LeagueTopScorersScreen(keyThree, _leaagueId);
-    tableScreen = LeagueTableScreen(keyFour);
-    pages = [dayMatchesScreen, rankingScreen, topScorersScreen, tableScreen];
+    pages = [dayMatchesScreen, rankingScreen, topScorersScreen];
     currentPage = pages[_navigationIndex];
 
     // creating streams for fixtures
@@ -84,11 +80,6 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
                 backgroundColor: Colors.deepOrange,
                 icon: Icon(Icons.supervisor_account),
                 title: Text('top scorers'),
-              ),
-              BottomNavigationBarItem(
-                backgroundColor: Colors.deepOrange,
-                icon: Icon(Icons.schedule),
-                title: Text('table'),
               ),
             ],
             currentIndex: _navigationIndex,

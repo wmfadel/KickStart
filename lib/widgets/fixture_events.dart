@@ -12,7 +12,7 @@ class FixtureEvents extends StatelessWidget {
       stream: Provider.of<ActiveFixtureProvider>(context).currentEventsStream,
       builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
         if (snapshot.hasError) return Center(child: Text(snapshot.error));
-        return snapshot.hasData
+        return snapshot.hasData && snapshot.data.length >= 1
             ? buildEventsList(snapshot.data)
             : Center(child: CircularProgressIndicator());
       },
