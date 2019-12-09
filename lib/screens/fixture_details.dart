@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kick_start/models/fixture.dart';
 import 'package:kick_start/providers/active_fixture_provider.dart';
+import 'package:kick_start/widgets/fixture_events.dart';
 import 'package:kick_start/widgets/fixture_formation.dart';
 import 'package:kick_start/widgets/fixture_info.dart';
 import 'package:kick_start/widgets/fixture_statistics.dart';
@@ -66,7 +67,7 @@ class _FixtureDetailsState extends State<FixtureDetails> {
               constraints: BoxConstraints.expand(height: 50),
               child: TabBar(
                 tabs: [
-                  Tab(text: "Live"),
+                  Tab(text: "Events"),
                   Tab(text: "Formation"),
                   Tab(text: "Statistics"),
                   Tab(text: "Info"),
@@ -79,9 +80,7 @@ class _FixtureDetailsState extends State<FixtureDetails> {
             Expanded(
               child: Container(
                 child: TabBarView(children: [
-                  Container(
-                    child: Text("Home Body"),
-                  ),
+                 FixtureEvents(),
                  FixtureFormation(),
                   FixtureStatistics(),
                   FixtureInfo(fixture),
