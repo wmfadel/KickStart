@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kick_start/widgets/app_drawer.dart';
+import 'package:kick_start/screens/pick_country_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/leagues_provider.dart';
@@ -17,8 +17,16 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Followed Leagues'),
         centerTitle: true,
+       leading: IconButton(
+         icon: Icon(Icons.flag,color: Colors.white),
+         onPressed: (){
+           Navigator.of(context).pop();
+           Navigator.of(context).pushNamed(PickCountryScreen.routeName, arguments: true);
+         },
+       ),
       ),
-      drawer:AppDrawer(),
+      //drawer:AppDrawer(),
+
       body: ListView.builder(
         itemCount: _leagueProvider.leagues.length,
         itemBuilder: (BuildContext context, int index) =>

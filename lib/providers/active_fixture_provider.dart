@@ -37,7 +37,6 @@ class ActiveFixtureProvider with ChangeNotifier {
       }
 
       // fetching formation
-
       if (!_currentFixtureFormation.hasValue ||
           _currentFixtureFormation.value.id != fixture.fixtureId)
         fetchFormation();
@@ -88,25 +87,25 @@ class ActiveFixtureProvider with ChangeNotifier {
 
   fetchFormation() async {
     final int id = _currentFixtureSubject.value.fixtureId;
-   // final String url = Environment.lineupsUrl + '/$id';
-    final String url = Environment.lineupsUrl + '/157163';
+    final String url = Environment.lineupsUrl + '/$id';
+//    final String url = Environment.lineupsUrl + '/157163';
     final http.Response response =
         await http.get(url, headers: Environment.requestHeaders);
 
     Map<String, dynamic> res = json.decode(response.body);
     if (res['api']['results'] < 1) {
-      _currentFixtureFormation.addError('not reay yet');
+      _currentFixtureFormation.addError('not ready yet');
       return;
     }
 
-//    Formation _formation = Formation.fromJson(
-//        res['api']['lineUps'],
-//        _currentFixtureSubject.value.homeTeam.teamName,
-//        _currentFixtureSubject.value.awayTeam.teamName);
     Formation _formation = Formation.fromJson(
         res['api']['lineUps'],
-        'Crystal Palace',
-        'Bournemouth');
+        _currentFixtureSubject.value.homeTeam.teamName,
+        _currentFixtureSubject.value.awayTeam.teamName);
+//    Formation _formation = Formation.fromJson(
+//        res['api']['lineUps'],
+//        'Crystal Palace',
+//        'Bournemouth');
     _formation.id = id;
     _currentFixtureFormation.add(_formation);
   }

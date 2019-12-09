@@ -19,6 +19,7 @@ class _PickCountryScreenState extends State<PickCountryScreen> {
   CountriesProvider _countriesProvider;
   LeaguesProvider _leaguesProvider;
   Future countriesFuture;
+  bool param;
 
   @override
   void didChangeDependencies() {
@@ -26,12 +27,13 @@ class _PickCountryScreenState extends State<PickCountryScreen> {
     _countriesProvider = Provider.of<CountriesProvider>(context, listen: false);
     _leaguesProvider = Provider.of<LeaguesProvider>(context, listen: false);
 
-    if (_countriesProvider.allCountries.length < 1){
+    if (_countriesProvider.allCountries.length < 1) {
       countriesFuture = _countriesProvider.fetchAllCountries();
-    }else{
-      countriesFuture = Future.value(true);
+    } else {
+      if (param == null)
+        param = ModalRoute.of(context).settings.arguments as bool;
+      if (param != null && param) countriesFuture = Future.value(true);
     }
-
   }
 
   @override
