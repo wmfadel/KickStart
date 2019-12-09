@@ -119,15 +119,12 @@ class ActiveFixtureProvider with ChangeNotifier {
   }
 
   fetchEvents() async {
-    //final int id = _currentFixtureSubject.value.fixtureId;
-    final int id = 157163;
+    final int id = _currentFixtureSubject.value.fixtureId;
+    //final int id = 157163;
     final String url = Environment.eventsUrl + '/$id';
     http.Response response =
         await http.get(url, headers: Environment.requestHeaders);
 
-    // TODO delete next 2 lines
-    print('events url: $url');
-    print('events response: ${response.body}');
 
     Map<String, dynamic> res = json.decode(response.body);
     if (res['api']['results'] < 1) {
@@ -139,7 +136,7 @@ class ActiveFixtureProvider with ChangeNotifier {
     for (var item in res['api']['events']) {
       _events.add(Event.fromJson(item));
     }
-    print('event value: ${_events[0].player}');
+
     _currentFixtureEvents.add(_events);
   }
 }
