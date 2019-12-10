@@ -11,6 +11,7 @@ class FormationColumn extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
+          if(teamData.formation != null)
           Container(
             width: MediaQuery.of(context).size.width * 0.75,
             height: 45,
@@ -45,14 +46,14 @@ class FormationColumn extends StatelessWidget {
               title: Text(player.player),
               leading: CircleAvatar(
                 child: Text(
-                  player.pos,
+                  player.pos??'P',
                   style: TextStyle(color: Colors.white),
                 ),
                 backgroundColor: getPosColor(player.pos),
               ),
               trailing: CircleAvatar(
                 child: Text(
-                  '${player.number}',
+                  '${player.number??''}',
                   style: TextStyle(color: Colors.black),
                 ),
                 backgroundColor: Colors.white,
@@ -60,6 +61,8 @@ class FormationColumn extends StatelessWidget {
             );
           }).toList(),
           Divider(),
+
+          if(teamData.substitutes != null && teamData.substitutes.length > 1)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Text(
@@ -67,19 +70,20 @@ class FormationColumn extends StatelessWidget {
               style: TextStyle(color: Colors.black),
             ),
           ),
+          if(teamData.substitutes != null && teamData.substitutes.length > 1)
           ...teamData.substitutes.map((StartXI player) {
             return ListTile(
               title: Text(player.player),
               leading: CircleAvatar(
                 child: Text(
-                  player.pos,
+                  player.pos??'P',
                   style: TextStyle(color: Colors.white),
                 ),
-                backgroundColor: getPosColor(player.pos),
+                backgroundColor: getPosColor(player.pos??' '),
               ),
               trailing: CircleAvatar(
                 child: Text(
-                  '${player.number}',
+                  '${player.number??''}',
                   style: TextStyle(color: Colors.black),
                 ),
                 backgroundColor: Colors.white12,

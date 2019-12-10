@@ -10,10 +10,14 @@ class FixturesProvider with ChangeNotifier {
   BehaviorSubject<List<Fixture>> _fixturesSubject =
       BehaviorSubject<List<Fixture>>();
 
+  BehaviorSubject<List<Fixture>> _leagueFixturesSubject =
+  BehaviorSubject<List<Fixture>>();
+
   Timer _fixturesTimer;
   bool stop = false;
 
   Stream get fixturesStream => _fixturesSubject.stream;
+  Stream get leagueFixturesStream => _leagueFixturesSubject.stream;
 
 
   getPeriodicStream(int leagueID) async {
@@ -52,5 +56,23 @@ class FixturesProvider with ChangeNotifier {
     _fixturesSubject.close();
     if (_fixturesTimer != null) _fixturesTimer.cancel();
     _fixturesTimer = null;
+  }
+
+
+ fetchLeagueFixturesByLeague(int leagueId) async {
+    final url =
+        '${Environment.fixtureByLeagueUrl}/$leagueId?timezone=Africa/Cairo';
+    http.Response response =
+    await http.get(url, headers: Environment.requestHeaders);
+    Map<String, dynamic> res = json.decode(response.body);
+    if (res['api']['results'] < 1) {
+      _leagueFixturesSubject.addError('Can\'t get the matches for this league');
+      return;
+    }
+    List<Fixture> _fixtures = [];
+    for (var item in res['api']['fixtures']) {
+      _fixtures.add(Fixture.fromJson(item));
+    }
+    _leagueFixturesSubject.add(_fixtures);
   }
 }

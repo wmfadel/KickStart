@@ -1,8 +1,8 @@
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:kick_start/models/scorer.dart';
 import 'package:kick_start/providers/players_provider.dart';
 import 'package:kick_start/providers/standings_provider.dart';
+import 'package:kick_start/widgets/flare_error_widget.dart';
 import 'package:provider/provider.dart';
 
 class LeagueTopScorersScreen extends StatefulWidget {
@@ -69,17 +69,7 @@ class _LeagueTopScorersScreenState extends State<LeagueTopScorersScreen> {
                       ],
                     ),
                   )
-                : Center(
-                    child: Container(
-                      width: 300,
-                      height: 300,
-                      padding: EdgeInsets.all(20),
-                      child: FlareActor("assets/flare/no_internet.flr",
-                          alignment: Alignment.center,
-                          fit: BoxFit.contain,
-                          animation: "Untitled"),
-                    ),
-                  );
+                : FlareErrorWidget(snapshots.error);
       },
     );
   }

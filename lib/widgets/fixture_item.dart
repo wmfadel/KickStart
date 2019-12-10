@@ -27,7 +27,7 @@ class FixtureItem extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           child: Container(
             width: _size.width,
-            height: 300,
+            height: 230,
             decoration: BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.centerLeft,

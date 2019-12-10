@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kick_start/providers/fixtures_provider.dart';
+import 'package:kick_start/screens/league_table.dart';
 import 'package:provider/provider.dart';
 
 import './league_day_matches_screen.dart';
@@ -17,12 +18,14 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
   final PageStorageKey keyOne = PageStorageKey('leaguDayMatches');
   final PageStorageKey keyTwo = PageStorageKey('leagueRanking');
   final PageStorageKey keyThree = PageStorageKey('leagueTopScorers');
+  final PageStorageKey keyFour = PageStorageKey('leagueAllMatches');
   final PageStorageBucket storageBucket = PageStorageBucket();
   int _navigationIndex = 0;
   Widget currentPage;
   LeagueDayMatchesScreen dayMatchesScreen;
   LeagueRankingScreen rankingScreen;
   LeagueTopScorersScreen topScorersScreen;
+  LeagueTable leagueTable;
   List<Widget> pages;
 
   FixturesProvider _fixturesProvider;
@@ -39,7 +42,8 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
     dayMatchesScreen = LeagueDayMatchesScreen(keyOne, _leaagueId);
     rankingScreen = LeagueRankingScreen(keyTwo, _leaagueId);
     topScorersScreen = LeagueTopScorersScreen(keyThree, _leaagueId);
-    pages = [dayMatchesScreen, rankingScreen, topScorersScreen];
+    leagueTable = LeagueTable(keyFour, _leaagueId);
+    pages = [dayMatchesScreen, rankingScreen, topScorersScreen, leagueTable];
     currentPage = pages[_navigationIndex];
 
     // creating streams for fixtures
@@ -79,7 +83,12 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
               BottomNavigationBarItem(
                 backgroundColor: Colors.deepOrange,
                 icon: Icon(Icons.supervisor_account),
-                title: Text('top scorers'),
+                title: Text('Ttop scorers'),
+              ),
+              BottomNavigationBarItem(
+                backgroundColor: Colors.deepOrange,
+                icon: Icon(Icons.table_chart),
+                title: Text('Table'),
               ),
             ],
             currentIndex: _navigationIndex,

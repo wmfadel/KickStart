@@ -1,7 +1,7 @@
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:kick_start/models/standings.dart';
 import 'package:kick_start/providers/standings_provider.dart';
+import 'package:kick_start/widgets/flare_error_widget.dart';
 import 'package:kick_start/widgets/forme_row.dart';
 import 'package:provider/provider.dart';
 
@@ -57,14 +57,7 @@ class _LeagueRankingScreenState extends State<LeagueRankingScreen> {
                       ],
                     ),
                   )
-                : Container(
-                    width: 300,
-                    height: 300,
-                    child: FlareActor("assets/flare/no_internet.flr",
-                        alignment: Alignment.center,
-                        fit: BoxFit.contain,
-                        animation: "Untitled"),
-                  );
+                : FlareErrorWidget(snapshots.error);
       },
     );
   }

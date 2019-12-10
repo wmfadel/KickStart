@@ -100,9 +100,12 @@ class ActiveFixtureProvider with ChangeNotifier {
     final http.Response response =
         await http.get(url, headers: Environment.requestHeaders);
 
+    print(url);
+    print('formation response : ${response.body}');
+
     Map<String, dynamic> res = json.decode(response.body);
     if (res['api']['results'] < 1) {
-      _currentFixtureFormation.addError('not ready yet');
+      _currentFixtureFormation.addError('Not ready yet, or we just can\'t find it 🐸');
       return;
     }
 
@@ -119,7 +122,6 @@ class ActiveFixtureProvider with ChangeNotifier {
   }
 
   fetchEvents() async {
-    print('fetching events');
     final int id = _currentFixtureSubject.value.fixtureId;
     //final int id = 157163;
     final String url = Environment.eventsUrl + '/$id';
