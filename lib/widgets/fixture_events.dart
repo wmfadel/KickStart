@@ -130,9 +130,15 @@ class FixtureEvents extends StatelessWidget {
             ),
           ),
         );
+      case 'normal goal':
       case 'goal':
         return Text(
-          event.type == 'Normal Goal' ? 'Goal' : event.type,
+          'Goal',style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        );
+
+      case 'own goal':
+        return Text(
+         'Own Goal',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         );
 

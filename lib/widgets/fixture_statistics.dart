@@ -79,9 +79,9 @@ class _FixtureStatisticsState extends State<FixtureStatistics> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Flexible(flex: 1, child: Text(home)),
+              Flexible(flex: 1, child: Text(home?? '0')),
               Flexible(flex: 2, child: Text(label)),
-              Flexible(flex: 1, child: Text(away))
+              Flexible(flex: 1, child: Text(away??'0'))
             ],
       ),
     );
