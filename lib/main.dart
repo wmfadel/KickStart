@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kick_start/screens/team_details.dart';
 import 'package:provider/provider.dart';
 
 import './providers/countries_provider.dart';
@@ -88,6 +89,7 @@ class App extends StatelessWidget {
           HomePage.routeName: (context) => HomePage(),
           LeagueDetailsScreen.routeName: (context) => LeagueDetailsScreen(),
           FixtureDetails.routeName: (context) => FixtureDetails(),
+          TeamDetails.routeName: (context) => TeamDetails(),
         },
       ),
     );

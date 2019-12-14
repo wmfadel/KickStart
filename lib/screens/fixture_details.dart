@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kick_start/models/fixture.dart';
 import 'package:kick_start/providers/active_fixture_provider.dart';
+import 'package:kick_start/screens/team_details.dart';
 import 'package:kick_start/widgets/fixture_events.dart';
 import 'package:kick_start/widgets/fixture_formation.dart';
 import 'package:kick_start/widgets/fixture_info.dart';
@@ -27,9 +28,7 @@ class _FixtureDetailsState extends State<FixtureDetails> {
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery
-        .of(context)
-        .size;
+    size = MediaQuery.of(context).size;
     return Scaffold(
       body: StreamBuilder<Fixture>(
         stream: _activeFixtureProvider.currentFixtureStream,
@@ -38,8 +37,8 @@ class _FixtureDetailsState extends State<FixtureDetails> {
           return snapShot.hasData
               ? buildDataBody(snapShot.data)
               : Center(
-            child: CircularProgressIndicator(),
-          );
+                  child: CircularProgressIndicator(),
+                );
         },
       ),
     );
@@ -80,8 +79,8 @@ class _FixtureDetailsState extends State<FixtureDetails> {
             Expanded(
               child: Container(
                 child: TabBarView(children: [
-                 FixtureEvents(),
-                 FixtureFormation(),
+                  FixtureEvents(),
+                  FixtureFormation(),
                   FixtureStatistics(),
                   FixtureInfo(fixture),
                 ]),
@@ -105,82 +104,49 @@ class _FixtureDetailsState extends State<FixtureDetails> {
         children: <Widget>[
           Expanded(
             flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-               Image.network(
-                    fixture.homeTeam.logo,
-                    width: size.width * 0.2,
-                    fit: BoxFit.cover,
-
-                ),
-                FittedBox(
-                  child: Text(
-                    fixture.homeTeam.teamName,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              ],
+            child: GestureDetector(
+              onTap: (){
+                Navigator.of(context).pushNamed(TeamDetails.routeName,
+                    arguments: fixture.homeTeam.teamId);
+              },
+              child: buildTeamHeader(
+                  fixture.homeTeam.logo, fixture.homeTeam.teamName),
             ),
           ),
           Expanded(
               flex: 1,
-              child: Container(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    if (fixture.league.logo != null)
-                      Image.network(
-                        fixture.league.logo,
-                        width: size.width * 0.2,
-                      ),
-                    Text(
-                      '${fixture.goalsHomeTeam} : ${fixture.goalsAwayTeam}',
-                      style: TextStyle(color: Colors.white, fontSize: 40),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  if (fixture.league.logo != null)
+                    Image.network(
+                      fixture.league.logo,
+                      width: size.width * 0.2,
                     ),
-                    Tooltip(
-                      message: fixture.status,
-                      child: Text(
-                        fixture.statusShort,
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
+                  Text(
+                    '${fixture.goalsHomeTeam} : ${fixture.goalsAwayTeam}',
+                    style: TextStyle(color: Colors.white, fontSize: 40),
+                  ),
+                  Tooltip(
+                    message: fixture.status,
+                    child: Text(
+                      fixture.statusShort,
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               )),
           Expanded(
             flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Image.network(
-                    fixture.awayTeam.logo,
-                    width: size.width * 0.2,
-                    fit: BoxFit.cover,
-
-                ),
-                FittedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Text(
-                      fixture.awayTeam.teamName,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                )
-              ],
+            child: GestureDetector(
+              onTap: (){
+                Navigator.of(context).pushNamed(TeamDetails.routeName,
+                    arguments: fixture.awayTeam.teamId);
+              },
+              child: buildTeamHeader(
+                  fixture.awayTeam.logo, fixture.awayTeam.teamName),
             ),
           ),
         ],
@@ -196,6 +162,33 @@ class _FixtureDetailsState extends State<FixtureDetails> {
             bottomRight: Radius.circular(60),
             bottomLeft: Radius.circular(8),
           )),
+    );
+  }
+
+  Column buildTeamHeader(String logo, String name) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Image.network(
+          logo,
+          width: size.width * 0.2,
+          fit: BoxFit.cover,
+        ),
+        FittedBox(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Text(
+              name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
