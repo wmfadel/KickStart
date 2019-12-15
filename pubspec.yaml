@@ -20,14 +20,15 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
   provider: ^3.1.0+1
   http: ^0.12.0+2
   flutter_svg: ^0.15.0
   flare_flutter: ^1.7.3
   rxdart: ^0.22.6
+  shared_preferences: ^0.5.6
+  firebase_core: ^0.4.3+1
+  cloud_firestore: ^0.13.0+1
+  firebase_auth: ^0.15.2
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +49,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
    - assets/pics/back.png
+   - assets/pics/logo.png
    - assets/flare/no_internet.flr
    - assets/flare/empty.flr
    - assets/flare/heart.flr

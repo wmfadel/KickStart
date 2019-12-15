@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kick_start/providers/auth_provider.dart';
+import 'package:kick_start/screens/auth_screen.dart';
 import 'package:kick_start/screens/team_details.dart';
+import 'package:kick_start/screens/wrapper.dart';
 import 'package:provider/provider.dart';
 
 import './providers/countries_provider.dart';
@@ -23,6 +26,7 @@ void main() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(App());
 }
 
@@ -30,6 +34,7 @@ class App extends StatelessWidget {
   final CountriesProvider _countriesProvider = CountriesProvider();
   final LeaguesProvider _leaguesProvider = LeaguesProvider();
   final StandingsProvider _standingsProvider = StandingsProvider();
+  final AuthProvider _authProvider = AuthProvider();
 
   final FixturesProvider _fixturesProvider = FixturesProvider();
   final ActiveFixtureProvider _activeFixtureProvider = ActiveFixtureProvider();
@@ -38,6 +43,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          builder: (_) => _authProvider,
+        ),
         ChangeNotifierProvider(
           builder: (_) => _countriesProvider,
         ),
@@ -82,8 +90,10 @@ class App extends StatelessWidget {
             ),
           ),
         ),
-        initialRoute: PickCountryScreen.routeName,
+        initialRoute: Wrapper.routeName,
         routes: {
+          Wrapper.routeName: (context) => Wrapper(),
+          AuthScreen.routeName: (context) => AuthScreen(),
           PickCountryScreen.routeName: (context) => PickCountryScreen(),
           PickLeagueScreen.routeName: (context) => PickLeagueScreen(),
           HomePage.routeName: (context) => HomePage(),

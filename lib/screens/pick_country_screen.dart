@@ -1,6 +1,7 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:kick_start/models/country.dart';
+import 'package:kick_start/providers/auth_provider.dart';
 import 'package:kick_start/providers/countries_provider.dart';
 import 'package:kick_start/providers/leagues_provider.dart';
 import 'package:kick_start/screens/home_screen.dart';
@@ -55,6 +56,8 @@ class _PickCountryScreenState extends State<PickCountryScreen> {
                   onPressed: _leaguesProvider.leagues.length == 0
                       ? _showErrorSnackBar
                       : () {
+                          _leaguesProvider.storeUserPrefs(
+                              Provider.of<AuthProvider>(context).userId);
                           Navigator.of(context)
                               .pushReplacementNamed(HomePage.routeName);
                         })

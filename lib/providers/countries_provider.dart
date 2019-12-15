@@ -40,5 +40,7 @@ class CountriesProvider with ChangeNotifier {
     flag = _allCountries.firstWhere((Country country)=>country.country==name).flag;
     return flag;
   }
+
+
 }
 // https://www.api-football.com/documentation#documentation-v239-api-demo

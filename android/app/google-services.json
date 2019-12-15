@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "651383015983",
+    "firebase_url": "https://cloudfirestoretutorial-f10b1.firebaseio.com",
+    "project_id": "cloudfirestoretutorial-f10b1",
+    "storage_bucket": "cloudfirestoretutorial-f10b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651383015983:android:11450fdf3b36f9aa6914da",
+        "android_client_info": {
+          "package_name": "com.example.kick_start"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "651383015983-8615q0svetcb2ajfqda8c8rubn8egvjd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVmFfMWyrRyHXBBg14sodsNeA8EAM-16M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "651383015983-8615q0svetcb2ajfqda8c8rubn8egvjd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

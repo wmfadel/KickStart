@@ -1,5 +1,3 @@
-import './coverage.dart';
-
 class League {
   int leagueId;
   String name;
@@ -13,7 +11,6 @@ class League {
   String flag;
   int standings;
   int isCurrent;
-  Coverage coverage;
 
   League(
       {this.leagueId,
@@ -27,8 +24,7 @@ class League {
         this.logo,
         this.flag,
         this.standings,
-        this.isCurrent,
-        this.coverage});
+        this.isCurrent});
 
   League.fromJson(Map<String, dynamic> json) {
     leagueId = json['league_id'];
@@ -43,9 +39,6 @@ class League {
     flag = json['flag'];
     standings = json['standings'];
     isCurrent = json['is_current'];
-    coverage = json['coverage'] != null
-        ? new Coverage.fromJson(json['coverage'])
-        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -62,9 +55,6 @@ class League {
     data['flag'] = this.flag;
     data['standings'] = this.standings;
     data['is_current'] = this.isCurrent;
-    if (this.coverage != null) {
-      data['coverage'] = this.coverage.toJson();
-    }
     return data;
   }
 }

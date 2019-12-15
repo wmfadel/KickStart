@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kick_start/providers/auth_provider.dart';
+import 'package:kick_start/screens/auth_screen.dart';
 import 'package:kick_start/screens/pick_country_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -18,12 +20,21 @@ class HomePage extends StatelessWidget {
         title: Text('Followed Leagues'),
         centerTitle: true,
        leading: IconButton(
-         icon: Icon(Icons.flag,color: Colors.white),
+         icon: Icon(Icons.exit_to_app,color: Colors.white),
          onPressed: (){
-           Navigator.of(context).pop();
-           Navigator.of(context).pushNamed(PickCountryScreen.routeName, arguments: true);
+          Provider.of<AuthProvider>(context, listen: false).signOut();
+          Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
          },
        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.flag,color: Colors.white),
+            onPressed: (){
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(PickCountryScreen.routeName, arguments: true);
+            },
+          )
+        ],
       ),
       //drawer:AppDrawer(),
 

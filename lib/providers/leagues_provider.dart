@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../environment.dart';
 import '../models/league.dart';
@@ -70,5 +71,22 @@ class LeaguesProvider with ChangeNotifier {
 
   League getLeagueById(int leagueId) {
     return _leagues.firstWhere((League league) => league.leagueId == leagueId);
+  }
+
+  storeUserPrefs(String userId) async {
+    var reference = Firestore.instance.collection(userId);
+    _leagues.forEach((League league) {
+      reference.add(league.toJson());
+    });
+  }
+
+  Future<bool> fetchUserPrefs(String userId) async {
+    var reference = Firestore.instance.collection(userId);
+    final QuerySnapshot result = await reference.getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
+    _leagues.clear();
+    documents.forEach(
+        (DocumentSnapshot doc) => _leagues.add(League.fromJson(doc.data)));
+    return true;
   }
 }
