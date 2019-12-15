@@ -10,24 +10,26 @@ class FixtureFormation extends StatefulWidget {
 }
 
 class _FixtureFormationState extends State<FixtureFormation> {
-
   Size size;
+
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     return StreamBuilder<Formation>(
-      stream: Provider.of<ActiveFixtureProvider>(context).currentFormationStream,
-      builder: (BuildContext context, AsyncSnapshot<Formation> snapshot){
-        if(snapshot.hasError)
-          return Center(child: Text(snapshot.error));
-        return snapshot.hasData?
-        buildFormationPage(snapshot.data):
-            CircularProgressIndicator();
+      stream:
+          Provider.of<ActiveFixtureProvider>(context).currentFormationStream,
+      builder: (BuildContext context, AsyncSnapshot<Formation> snapshot) {
+        if (snapshot.hasError) return Center(child: Text(snapshot.error));
+        return snapshot.hasData &&
+                snapshot.data.homeTeam != null &&
+                snapshot.data.awayTeam != null
+            ? buildFormationPage(snapshot.data)
+            : CircularProgressIndicator();
       },
     );
   }
 
-  Widget buildFormationPage(Formation formation){
+  Widget buildFormationPage(Formation formation) {
     return Container(
       width: size.width,
       height: size.height - 250,

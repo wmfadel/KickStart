@@ -30,7 +30,6 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.flag,color: Colors.white),
             onPressed: (){
-              Navigator.of(context).pop();
               Navigator.of(context).pushNamed(PickCountryScreen.routeName, arguments: true);
             },
           )
