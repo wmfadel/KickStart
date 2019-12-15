@@ -46,7 +46,9 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
               ),
               MaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  showLoginSheet();
+                },
                 child: Text('Login'),
                 minWidth: 250,
                 color: Colors.deepOrange,
@@ -137,6 +139,75 @@ class _AuthScreenState extends State<AuthScreen> {
                     child: Text('Continue'),
                     textColor: Colors.deepOrange,
                   ),
+            SizedBox(height: 20),
+          ],
+        );
+      },
+      elevation: 20,
+      backgroundColor: Colors.white,
+    );
+  }
+
+
+  showLoginSheet() {
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+    _scaffoldKey.currentState.showBottomSheet(
+          (BuildContext mContext) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Login',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: TextField(
+                controller: emailController,
+                autofocus: true,
+                maxLines: 1,
+                expands: false,
+                minLines: 1,
+                decoration: InputDecoration(
+                    labelText: 'Email', hintText: 'email@email.com'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: TextField(
+                controller: passwordController,
+                autofocus: true,
+                maxLines: 1,
+                expands: false,
+                minLines: 1,
+                decoration: InputDecoration(
+                    labelText: 'Password', hintText: 'password'),
+              ),
+            ),
+            SizedBox(height: 30),
+            FlatButton(
+              onPressed: () async {
+                bool result = await _authProvider.signInWithEmailAndPassword(
+                    emailController.text,
+                    passwordController.text
+                );
+                if(result){
+                  Navigator.of(context).pushReplacementNamed(Wrapper.routeName);
+                }
+              },
+              child: Text('Continue'),
+              textColor: Colors.deepOrange,
+            ),
             SizedBox(height: 20),
           ],
         );

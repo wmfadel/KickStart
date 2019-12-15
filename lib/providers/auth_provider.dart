@@ -56,6 +56,8 @@ class AuthProvider with ChangeNotifier {
 
   Future signOut() async {
     try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user', null);
       return await _auth.signOut();
     } catch (error) {
       print(error.toString());
