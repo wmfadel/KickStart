@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../environment.dart';
 import '../models/league.dart';
@@ -74,13 +75,26 @@ class LeaguesProvider with ChangeNotifier {
   }
 
   storeUserPrefs(String userId) async {
+    if (userId == null) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      userId = prefs.getString('user');
+    }
     var reference = Firestore.instance.collection(userId);
+    final QuerySnapshot result = await reference.getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
+    documents.forEach((DocumentSnapshot doc){
+      reference.document(doc.documentID).delete();
+    });
     _leagues.forEach((League league) {
       reference.add(league.toJson());
     });
   }
 
   Future<bool> fetchUserPrefs(String userId) async {
+    if (userId == null) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      userId = prefs.getString('user');
+    }
     var reference = Firestore.instance.collection(userId);
     final QuerySnapshot result = await reference.getDocuments();
     final List<DocumentSnapshot> documents = result.documents;
