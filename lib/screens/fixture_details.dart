@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kick_start/models/fixture.dart';
 import 'package:kick_start/providers/active_fixture_provider.dart';
@@ -124,6 +125,7 @@ class _FixtureDetailsState extends State<FixtureDetails> {
                     Image.network(
                       fixture.league.logo,
                       width: size.width * 0.2,
+                      height: 50,
                     ),
                   Text(
                     '${fixture.goalsHomeTeam} : ${fixture.goalsAwayTeam}',

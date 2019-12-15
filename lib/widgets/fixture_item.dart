@@ -54,7 +54,7 @@ class FixtureItem extends StatelessWidget {
     return Align(
       alignment: Alignment.center,
       child: Container(
-        width: _size.width * 0.35,
+        width: _size.width * 0.33,
         height: fixture.statusShort == 'NS' ? 50 : 40,
         child: Center(
           child: Column(
@@ -191,7 +191,7 @@ class FixtureItem extends StatelessWidget {
               fixture.awayTeam.teamName,
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: fixture.homeTeam.teamName.length > 15 ? 16 : 22,
+                  fontSize: fixture.awayTeam.teamName.length > 13 ? 16 : 22,
                   fontWeight: FontWeight.bold),
             )),
           ],

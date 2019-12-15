@@ -136,7 +136,6 @@ class ActiveFixtureProvider with ChangeNotifier {
     for (var item in res['api']['events']) {
       _events.add(Event.fromJson(item));
     }
-
-    _currentFixtureEvents.add(_events.reversed);
+    _currentFixtureEvents.add(_events.reversed.toList());
   }
 }
