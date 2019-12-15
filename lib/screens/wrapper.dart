@@ -4,7 +4,6 @@ import 'package:kick_start/providers/auth_provider.dart';
 import 'package:kick_start/providers/leagues_provider.dart';
 import 'package:kick_start/screens/auth_screen.dart';
 import 'package:kick_start/screens/home_screen.dart';
-import 'package:kick_start/screens/pick_country_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
