@@ -79,6 +79,7 @@ class LeaguesProvider with ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       userId = prefs.getString('user');
     }
+    if(userId == null) return;
     var reference = Firestore.instance.collection(userId);
     final QuerySnapshot result = await reference.getDocuments();
     final List<DocumentSnapshot> documents = result.documents;
