@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kick_start/models/league.dart';
+import 'package:kick_start/providers/auth_provider.dart';
 import 'package:kick_start/widgets/league_item.dart';
 import '../providers/countries_provider.dart';
 import '../providers/leagues_provider.dart';

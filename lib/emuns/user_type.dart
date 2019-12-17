@@ -1,0 +1,4 @@
+enum UserType{
+  Registered,
+  Anonymous
+}

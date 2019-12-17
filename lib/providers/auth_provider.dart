@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kick_start/emuns/account_status.dart';
+import 'package:kick_start/emuns/user_type.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   AccountStatus accountStatus;
+  UserType userType;
   bool isLoading = false;
   String userId;
 

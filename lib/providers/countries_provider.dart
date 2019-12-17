@@ -24,7 +24,7 @@ class CountriesProvider with ChangeNotifier {
       return false;
     }
     res['api']['countries'].forEach((country) {
-      if (country['country'] != 'Israel')
+      if (country['country'] != 'Israel' && country['country'] != 'World')
         _allCountries.add(Country.fromJson(country));
     });
     return true;

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kick_start/emuns/user_type.dart';
 import 'package:kick_start/providers/auth_provider.dart';
+import 'package:kick_start/providers/leagues_provider.dart';
 import 'package:kick_start/screens/pick_country_screen.dart';
 import 'package:kick_start/screens/wrapper.dart';
+import 'package:kick_start/widgets/login_form.dart';
+import 'package:kick_start/widgets/signup_form.dart';
 import 'package:provider/provider.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -20,6 +24,7 @@ class _AuthScreenState extends State<AuthScreen> {
     super.didChangeDependencies();
     _authProvider = Provider.of<AuthProvider>(context);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +70,10 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               FlatButton(
                 onPressed: () {
+                  _authProvider.userType = UserType.Anonymous;
+                  Provider.of<LeaguesProvider>(context, listen: false).flushLeagues();
                   Navigator.of(context)
-                      .pushReplacementNamed(PickCountryScreen.routeName);
+                      .pushNamed(PickCountryScreen.routeName, arguments: true);
                 },
                 child: Text('Continue without registering'),
                 textColor: Colors.deepOrange,
@@ -79,138 +86,19 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   showSignUPSheet() {
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
     _scaffoldKey.currentState.showBottomSheet(
       (BuildContext mContext) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Register',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: emailController,
-                autofocus: true,
-                maxLines: 1,
-                expands: false,
-
-                minLines: 1,
-                decoration: InputDecoration(
-                    labelText: 'Email', hintText: 'email@email.com'),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: passwordController,
-                autofocus: true,
-                maxLines: 1,
-                expands: false,
-
-                minLines: 1,
-                decoration: InputDecoration(
-                    labelText: 'Password', hintText: 'password'),
-              ),
-            ),
-            SizedBox(height: 30),
-            FlatButton(
-                    onPressed: () async {
-                      bool result = await _authProvider.registerWithEmailAndPassword(
-                        emailController.text,
-                        passwordController.text
-                      );
-                      if(result){
-                        Navigator.of(context).pushReplacementNamed(PickCountryScreen.routeName);
-                      }
-                    },
-                    child: Text('Continue'),
-                    textColor: Colors.deepOrange,
-                  ),
-            SizedBox(height: 20),
-          ],
-        );
+        return SignUpForm();
       },
       elevation: 20,
       backgroundColor: Colors.white,
     );
   }
 
-
   showLoginSheet() {
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
     _scaffoldKey.currentState.showBottomSheet(
-          (BuildContext mContext) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Login',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: emailController,
-                autofocus: true,
-                maxLines: 1,
-                expands: false,
-                minLines: 1,
-                decoration: InputDecoration(
-                    labelText: 'Email', hintText: 'email@email.com'),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: passwordController,
-                autofocus: true,
-                maxLines: 1,
-                expands: false,
-                minLines: 1,
-                decoration: InputDecoration(
-                    labelText: 'Password', hintText: 'password'),
-              ),
-            ),
-            SizedBox(height: 30),
-            FlatButton(
-              onPressed: () async {
-                bool result = await _authProvider.signInWithEmailAndPassword(
-                    emailController.text,
-                    passwordController.text
-                );
-                if(result){
-                  Navigator.of(context).pushReplacementNamed(Wrapper.routeName);
-                }
-              },
-              child: Text('Continue'),
-              textColor: Colors.deepOrange,
-            ),
-            SizedBox(height: 20),
-          ],
-        );
+      (BuildContext mContext) {
+        return LoginForm();
       },
       elevation: 20,
       backgroundColor: Colors.white,

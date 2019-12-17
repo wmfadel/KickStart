@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kick_start/emuns/user_type.dart';
 import 'package:kick_start/providers/auth_provider.dart';
 import 'package:kick_start/screens/auth_screen.dart';
 import 'package:kick_start/screens/pick_country_screen.dart';
@@ -15,6 +16,9 @@ class HomePage extends StatelessWidget {
     LeaguesProvider _leagueProvider =
         Provider.of<LeaguesProvider>(context, listen: false);
 
+    AuthProvider _authProvider =
+    Provider.of<AuthProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Followed Leagues'),
@@ -22,8 +26,11 @@ class HomePage extends StatelessWidget {
        leading: IconButton(
          icon: Icon(Icons.exit_to_app,color: Colors.white),
          onPressed: (){
-          Provider.of<AuthProvider>(context, listen: false).signOut();
-          Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
+           if(_authProvider.userType != UserType.Anonymous)
+              _authProvider.signOut();
+           _authProvider.userType = null;
+           Navigator.of(context)
+               .pushNamedAndRemoveUntil(AuthScreen.routeName, (Route<dynamic> route) => false);
          },
        ),
         actions: <Widget>[

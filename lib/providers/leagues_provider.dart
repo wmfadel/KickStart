@@ -104,4 +104,8 @@ class LeaguesProvider with ChangeNotifier {
         (DocumentSnapshot doc) => _leagues.add(League.fromJson(doc.data)));
     return true;
   }
+
+  flushLeagues(){
+    _leagues.clear();
+  }
 }

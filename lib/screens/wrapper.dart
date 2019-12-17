@@ -18,7 +18,7 @@ class _WrapperState extends State<Wrapper> {
   AuthProvider _authProvider;
   LeaguesProvider _leaguesProvider;
   String _userId;
-  String _message = 'Checking user';
+  String _message = 'Getting User Data';
 
   @override
   void didChangeDependencies() {
@@ -37,13 +37,15 @@ class _WrapperState extends State<Wrapper> {
           case AccountStatus.Login:
             _leaguesProvider.fetchUserPrefs(_userId).then((bool value) {
               if (value)
-                Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(HomePage.routeName, (Route<dynamic> route) => false);
             });
             break;
           case AccountStatus.SignUp:
             _leaguesProvider.fetchUserPrefs(_userId).then((bool value) {
               if (value)
-                Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(HomePage.routeName, (Route<dynamic> route) => false);
             });
             break;
         }

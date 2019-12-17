@@ -59,7 +59,8 @@ class _PickCountryScreenState extends State<PickCountryScreen> {
                           _leaguesProvider.storeUserPrefs(
                               Provider.of<AuthProvider>(context).userId);
                           Navigator.of(context)
-                              .pushReplacementNamed(HomePage.routeName);
+                              .pushNamedAndRemoveUntil(HomePage.routeName, (Route<dynamic> route) => false);
+
                         })
             ],
             flexibleSpace: FlexibleSpaceBar(
