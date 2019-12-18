@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:kick_start/emuns/account_status.dart';
 import 'package:kick_start/emuns/user_type.dart';
+import 'package:kick_start/models/custom_error.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -11,7 +13,8 @@ class AuthProvider with ChangeNotifier {
   bool isLoading = false;
   String userId;
 
-  Future<bool> signInWithEmailAndPassword(String email, String password) async {
+  Future<dynamic> signInWithEmailAndPassword(
+      String email, String password) async {
     accountStatus = AccountStatus.Login;
     try {
       isLoading = true;
@@ -25,11 +28,18 @@ class AuthProvider with ChangeNotifier {
       isLoading = false;
       notifyListeners();
       return true;
-    } catch (error) {
+    } on PlatformException catch (error) {
       print(error.toString());
       isLoading = false;
       notifyListeners();
-      return false;
+      String message = error.code == 'ERROR_USER_NOT_FOUND'
+          ? 'User Not Found'
+          : error.code == 'ERROR_WRONG_PASSWORD'
+              ? 'Wrong Password'
+              : 'Invalid Emil';
+      return CustomError(message, error.message);
+    } catch (error) {
+      print(error.toString());
     }
   }
 
@@ -67,4 +77,3 @@ class AuthProvider with ChangeNotifier {
     }
   }
 }
-
