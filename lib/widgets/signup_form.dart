@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kick_start/emuns/user_type.dart';
+import 'package:kick_start/models/custom_error.dart';
 import 'package:kick_start/providers/auth_provider.dart';
 import 'package:kick_start/screens/pick_country_screen.dart';
+import 'package:kick_start/utils/dialogs.dart';
 import 'package:provider/provider.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -10,10 +12,17 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
-
+  AuthProvider _authProvider;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  Dialogs _dialogs = Dialogs();
+  bool showPassword = false;
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _authProvider = Provider.of<AuthProvider>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +36,7 @@ class _SignUpFormState extends State<SignUpForm> {
           child: Text(
             'Register',
             style: TextStyle(
-                color: Colors.black,
-                fontSize: 25,
-                fontWeight: FontWeight.bold),
+                color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(height: 30),
@@ -52,24 +59,36 @@ class _SignUpFormState extends State<SignUpForm> {
             autofocus: true,
             maxLines: 1,
             expands: false,
-
+            obscureText: !showPassword,
             minLines: 1,
             decoration: InputDecoration(
-                labelText: 'Password', hintText: 'password'),
+                labelText: 'Password',
+                hintText: 'password',
+                suffix: IconButton(
+                    icon: Icon(
+                        showPassword ? Icons.visibility : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        showPassword = !showPassword;
+                      });
+                    })),
           ),
         ),
         SizedBox(height: 30),
         FlatButton(
-          onPressed: () async {
-            bool result = await Provider.of<AuthProvider>(context, listen: false).registerWithEmailAndPassword(
-                emailController.text,
-                passwordController.text
-            );
-            if(result){
-              Provider.of<AuthProvider>(context, listen: false).userType = UserType.Registered;
-              Navigator.of(context).pushReplacementNamed(PickCountryScreen.routeName);
-            }
-          },
+          onPressed: _authProvider.isLoading
+              ? null
+              : () async {
+                  var result = await _authProvider.registerWithEmailAndPassword(
+                      emailController.text, passwordController.text);
+                  if (result is bool && result) {
+                    _authProvider.userType = UserType.Registered;
+                    Navigator.of(context)
+                        .pushReplacementNamed(PickCountryScreen.routeName);
+                  } else {
+                    _dialogs.showCustomError(context, result as CustomError);
+                  }
+                },
           child: Text('Continue'),
           textColor: Colors.deepOrange,
         ),

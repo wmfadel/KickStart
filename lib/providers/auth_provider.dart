@@ -38,12 +38,10 @@ class AuthProvider with ChangeNotifier {
               ? 'Wrong Password'
               : 'Invalid Emil';
       return CustomError(message, error.message);
-    } catch (error) {
-      print(error.toString());
     }
   }
 
-  Future<bool> registerWithEmailAndPassword(
+  Future<dynamic> registerWithEmailAndPassword(
       String email, String password) async {
     accountStatus = AccountStatus.SignUp;
     try {
@@ -58,11 +56,14 @@ class AuthProvider with ChangeNotifier {
       isLoading = false;
       notifyListeners();
       return true;
-    } catch (error) {
+    } on PlatformException catch (error) {
       print(error.toString());
       isLoading = false;
       notifyListeners();
-      return false;
+      String message = error.code == 'ERROR_WEAK_PASSWORD'
+          ? 'Invalid Password, Weak!!'
+          : 'Invalid Emil';
+      return CustomError(message, error.message);
     }
   }
 

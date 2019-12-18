@@ -12,13 +12,11 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-
   AuthProvider _authProvider;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   Dialogs _dialogs = Dialogs();
   bool showPassword = false;
-
 
   @override
   void didChangeDependencies() {
@@ -68,31 +66,32 @@ class _LoginFormState extends State<LoginForm> {
             decoration: InputDecoration(
                 labelText: 'Password',
                 hintText: 'password',
-                suffix : IconButton(
+                suffix: IconButton(
                     icon: Icon(
                         showPassword ? Icons.visibility : Icons.visibility_off),
-                    onPressed: (){
+                    onPressed: () {
                       setState(() {
                         showPassword = !showPassword;
                       });
                     })),
           ),
         ),
-        SizedBox(height: 30),
+        SizedBox(height: 20),
         FlatButton(
-          onPressed:_authProvider.isLoading?null: () async {
-            var result =
-                await
-                    _authProvider.signInWithEmailAndPassword(
-                        emailController.text, passwordController.text);
-            if (result is bool && result) {
-              Provider.of<AuthProvider>(context, listen: false).userType =
-                  UserType.Registered;
-              Navigator.of(context).pushReplacementNamed(Wrapper.routeName);
-            }else{
-              _dialogs.showCustomError(context, result as CustomError);
-            }
-          },
+          onPressed: _authProvider.isLoading
+              ? null
+              : () async {
+                  var result = await _authProvider.signInWithEmailAndPassword(
+                      emailController.text, passwordController.text);
+                  if (result is bool && result) {
+                    Provider.of<AuthProvider>(context, listen: false).userType =
+                        UserType.Registered;
+                    Navigator.of(context)
+                        .pushReplacementNamed(Wrapper.routeName);
+                  } else {
+                    _dialogs.showCustomError(context, result as CustomError);
+                  }
+                },
           child: Text('Continue'),
           textColor: Colors.deepOrange,
         ),
