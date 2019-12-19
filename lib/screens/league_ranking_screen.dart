@@ -129,8 +129,9 @@ class _LeagueRankingScreenState extends State<LeagueRankingScreen> {
                       return Center(
                         child: Image.network(
                           _standingsProvider.standings[0].logo,
-                          height: 180 * size,
-                          fit: BoxFit.cover,
+                          height: 200 * size,
+                          width: MediaQuery.of(context).size.width * 0.8 ,
+                          fit: BoxFit.contain,
                         ),
                       );
                     },

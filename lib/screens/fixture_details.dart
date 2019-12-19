@@ -175,7 +175,8 @@ class _FixtureDetailsState extends State<FixtureDetails> {
         Image.network(
           logo,
           width: size.width * 0.2,
-          fit: BoxFit.cover,
+          height:100,
+          fit: BoxFit.fitHeight,
         ),
         FittedBox(
           child: Padding(

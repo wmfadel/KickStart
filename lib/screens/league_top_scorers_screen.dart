@@ -134,7 +134,7 @@ class _LeagueTopScorersScreenState extends State<LeagueTopScorersScreen> {
                     _standingsProvider
                         .getTamFlagById(_playersProvider.topScorers[0].teamId),
                     height: 150 * size,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
