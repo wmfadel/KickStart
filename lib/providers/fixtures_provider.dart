@@ -11,25 +11,25 @@ class FixturesProvider with ChangeNotifier {
       BehaviorSubject<List<Fixture>>();
 
   BehaviorSubject<List<Fixture>> _leagueFixturesSubject =
-  BehaviorSubject<List<Fixture>>();
+      BehaviorSubject<List<Fixture>>();
 
   Timer _fixturesTimer;
   bool stop = false;
 
   Stream get fixturesStream => _fixturesSubject.stream;
-  Stream get leagueFixturesStream => _leagueFixturesSubject.stream;
 
+  Stream get leagueFixturesStream => _leagueFixturesSubject.stream;
 
   getPeriodicStream(int leagueID) async {
     var res = await fetchFixturesByLeague(leagueID);
     if (res == null || !res) {
-      _fixturesSubject.sink.addError('NoData');
+      _fixturesSubject.sink.addError('No Matches for this day');
     }
     if (!stop) {
       _fixturesTimer = Timer.periodic(Duration(seconds: 50), (_) async {
         var res = await fetchFixturesByLeague(leagueID);
         if (!res) {
-          _fixturesSubject.sink.addError('NoData');
+          _fixturesSubject.sink.addError('Can\'t get todays matches');
         }
       });
     }
@@ -42,7 +42,8 @@ class FixturesProvider with ChangeNotifier {
     http.Response response =
         await http.get(url, headers: Environment.requestHeaders);
     Map<String, dynamic> res = json.decode(response.body);
-    if (res['api']['results'] < 1) return false;
+    if (res == null || res['api'] == null || res['api']['results'] < 1)
+      return false;
     List<Fixture> _fixtures = [];
     for (var item in res['api']['fixtures']) {
       _fixtures.add(Fixture.fromJson(item));
@@ -58,12 +59,11 @@ class FixturesProvider with ChangeNotifier {
     _fixturesTimer = null;
   }
 
-
- fetchLeagueFixturesByLeague(int leagueId) async {
+  fetchLeagueFixturesByLeague(int leagueId) async {
     final url =
         '${Environment.fixtureByLeagueUrl}/$leagueId?timezone=Africa/Cairo';
     http.Response response =
-    await http.get(url, headers: Environment.requestHeaders);
+        await http.get(url, headers: Environment.requestHeaders);
     Map<String, dynamic> res = json.decode(response.body);
     if (res['api']['results'] < 1) {
       _leagueFixturesSubject.addError('Can\'t get the matches for this league');

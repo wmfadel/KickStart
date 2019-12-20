@@ -32,11 +32,14 @@ class AuthProvider with ChangeNotifier {
       print(error.toString());
       isLoading = false;
       notifyListeners();
-      String message = error.code == 'ERROR_USER_NOT_FOUND'
-          ? 'User Not Found'
-          : error.code == 'ERROR_WRONG_PASSWORD'
-              ? 'Wrong Password'
-              : 'Invalid Emil';
+      String message = error.code;
+      if(error.code == 'ERROR_USER_NOT_FOUND'){
+        message = 'User Not Found';
+      }else if(error.code == 'ERROR_WRONG_PASSWORD'){
+        message = 'Wrong Password';
+      }else if(error.code == 'ERROR_INVALID_EMAIL'){
+        message = 'Invalid Email';
+      }
       return CustomError(message, error.message);
     }
   }
@@ -60,9 +63,14 @@ class AuthProvider with ChangeNotifier {
       print(error.toString());
       isLoading = false;
       notifyListeners();
-      String message = error.code == 'ERROR_WEAK_PASSWORD'
-          ? 'Invalid Password, Weak!!'
-          : 'Invalid Emil';
+      String message = error.code;
+
+      if(error.code == 'ERROR_WEAK_PASSWORD'){
+        message = 'Invalid Password, Weak!!';
+      }else if(error.code == 'ERROR_INVALID_EMAIL'){
+        message = 'Invalid Email';
+      }
+
       return CustomError(message, error.message);
     }
   }
