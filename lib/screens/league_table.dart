@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kick_start/models/fixture.dart';
 import 'package:kick_start/providers/fixtures_provider.dart';
-import 'package:kick_start/widgets/flare_error_widget.dart';
 import 'package:kick_start/widgets/fixture_item.dart';
+import 'package:kick_start/widgets/flare_error_widget.dart';
 import 'package:provider/provider.dart';
 
 class LeagueTable extends StatefulWidget {
@@ -16,14 +16,24 @@ class LeagueTable extends StatefulWidget {
 
 class _LeagueTableState extends State<LeagueTable> {
   FixturesProvider _fixturesProvider;
+  ScrollController _scrollController;
   DateTime date;
+
+
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _fixturesProvider = Provider.of<FixturesProvider>(context, listen: false);
-    _fixturesProvider.fetchLeagueFixturesByLeague(widget.leagueId);
+    _fixturesProvider.fetchLeagueFixturesByLeague(widget.leagueId);  
+
+   _fixturesProvider.leagueFixturesStream.listen((value){
+     _scrollController = ScrollController(initialScrollOffset: _fixturesProvider.getNextDayOffset());
+   });
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +47,7 @@ class _LeagueTableState extends State<LeagueTable> {
         if (snapshot.hasData && snapshot.data[0].leagueId==widget.leagueId) {
          date = DateTime.parse(snapshot.data[0].eventDate);
           return ListView.builder(
+            controller: _scrollController,
             itemCount: snapshot.data.length,
             itemBuilder: (BuildContext context, index) {
               return Column(

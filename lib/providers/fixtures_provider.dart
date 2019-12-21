@@ -75,4 +75,32 @@ class FixturesProvider with ChangeNotifier {
     }
     _leagueFixturesSubject.add(_fixtures);
   }
+
+// item = 230
+// date = 150
+
+  double getNextDayOffset(){
+    double position = 0;
+      DateTime stopDate = DateTime.now().add(Duration(days: 2));
+      if(_leagueFixturesSubject.hasValue){
+        DateTime currentItemDate = DateTime.parse(_leagueFixturesSubject.value[0].eventDate);
+          for(Fixture fixture in _leagueFixturesSubject.value){
+            if(DateTime.parse(fixture.eventDate).isAfter(stopDate)){
+               return position;
+            }
+            if(DateTime.parse(fixture.eventDate).difference(currentItemDate).inDays >= 1){
+              currentItemDate = DateTime.parse(fixture.eventDate);
+              position += 150;
+            }
+            position += 230;
+          }
+      }
+    return position;
+  }
+
+
+
+
+
+
 }

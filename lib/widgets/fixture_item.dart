@@ -60,14 +60,18 @@ class FixtureItem extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                fixture.status,
-                style: TextStyle(fontSize: 18),
+              FittedBox(
+                              child: Text(
+                  fixture.status,
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
               if (fixture.statusShort == 'NS')
-                Text(
-                  '${fixture.eventDate.substring(11, 16)} GMT',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+                FittedBox(
+                                  child: Text(
+                    '${fixture.eventDate.substring(11, 16)} GMT',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
                 )
             ],
           ),
