@@ -85,10 +85,15 @@ class TeamStats extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              '${team.venueName}, ${team.venueSurface}, ${team.venueCity}, ${team.venueAddress},',
+              '${team.venueName}, ${team.venueCity}, ${team.venueAddress},',
               style: TextStyle(color: Colors.black, fontSize: 20),
             ),
             SizedBox(height: 4),
+            Text(
+              'Type: ${team.venueSurface}.',
+              style: TextStyle(color: Colors.black, fontSize: 20),
+            ),
+             SizedBox(height: 4),
             Text(
               'Capacity: ${team.venueCapacity}.',
               style: TextStyle(color: Colors.black, fontSize: 20),

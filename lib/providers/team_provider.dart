@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:kick_start/environment.dart';
+import 'package:kick_start/models/player.dart';
 import 'package:kick_start/models/team.dart';
 import 'package:kick_start/models/team_statistics.dart';
 import 'package:rxdart/rxdart.dart';
@@ -16,27 +17,34 @@ class TeamProvider with ChangeNotifier {
   BehaviorSubject<TeamStatistics> _teamStatisticsSubject = BehaviorSubject();
   Stream<TeamStatistics> get statisticsStream => _teamStatisticsSubject.stream;
 
+  BehaviorSubject<List<Player>> _squadSubject = BehaviorSubject();
+  Stream<List<Player>> get squadStream => _squadSubject.stream;
+
   TeamProvider() {
     teamStream.listen((value) {
-      // TODO we have team start fetching all its data
+      // we have team start fetching all its data
       if (value != null) {
         fetchTeamSttistics();
-
+        fetchSquad();
       }
     });
   }
 
-  removeCurrentValues(){
+  removeCurrentValues() {
+    // delete the values from all the subjects by adding null
+    // to prevent showing another team data when switching between teams
     teamSubject.add(null);
     _teamStatisticsSubject.add(null);
+    _squadSubject.add(null);
   }
 
   fetchTeam(int teamId, int leagueId) async {
+    // donot fetch new value if we already have this teams data
     if (teamId == this.teamID) {
       return;
     } else {
-     removeCurrentValues();
-      
+      removeCurrentValues();
+
       this.teamID = teamId;
       this.leagueID = leagueId;
     }
@@ -62,10 +70,27 @@ class TeamProvider with ChangeNotifier {
         await http.get(url, headers: Environment.requestHeaders);
     Map<String, dynamic> res = json.decode(response.body);
     if (res['api']['results'] < 1) {
-      _teamStatisticsSubject.addError('Cannot fetch team statistics');
+      _teamStatisticsSubject.addError('Cannot fetch team statistics 😿');
       return;
     }
     _teamStatisticsSubject
         .add(TeamStatistics.fromJson(res['api']['statistics']));
+  }
+
+  fetchSquad() async {
+    String url = Environment.squadUrl + '/$teamID/${DateTime.now().year}';
+
+    http.Response response =
+        await http.get(url, headers: Environment.requestHeaders);
+    Map<String, dynamic> res = json.decode(response.body);
+    if (res['api']['results'] < 1) {
+      _squadSubject.addError('Cannot squad for this season 😿');
+      return;
+    }
+    List<Player> players = [];
+    for (var player in res['api']['players']) {
+      players.add(Player.fromJson(player));
+    }
+    _squadSubject.add(players);
   }
 } // end of class
