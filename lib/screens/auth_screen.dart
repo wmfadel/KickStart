@@ -3,7 +3,6 @@ import 'package:kick_start/emuns/user_type.dart';
 import 'package:kick_start/providers/auth_provider.dart';
 import 'package:kick_start/providers/leagues_provider.dart';
 import 'package:kick_start/screens/pick_country_screen.dart';
-import 'package:kick_start/screens/wrapper.dart';
 import 'package:kick_start/widgets/login_form.dart';
 import 'package:kick_start/widgets/signup_form.dart';
 import 'package:provider/provider.dart';

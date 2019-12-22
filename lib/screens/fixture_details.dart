@@ -108,7 +108,7 @@ class _FixtureDetailsState extends State<FixtureDetails> {
             child: GestureDetector(
               onTap: (){
                 Navigator.of(context).pushNamed(TeamDetails.routeName,
-                    arguments: fixture.homeTeam.teamId);
+                    arguments: {'teamID':fixture.homeTeam.teamId, 'leagueID':fixture.leagueId});
               },
               child: buildTeamHeader(
                   fixture.homeTeam.logo, fixture.homeTeam.teamName),
@@ -145,7 +145,7 @@ class _FixtureDetailsState extends State<FixtureDetails> {
             child: GestureDetector(
               onTap: (){
                 Navigator.of(context).pushNamed(TeamDetails.routeName,
-                    arguments: fixture.awayTeam.teamId);
+                    arguments: {'teamID':fixture.awayTeam.teamId, 'leagueID':fixture.leagueId});
               },
               child: buildTeamHeader(
                   fixture.awayTeam.logo, fixture.awayTeam.teamName),
@@ -174,7 +174,7 @@ class _FixtureDetailsState extends State<FixtureDetails> {
       children: <Widget>[
         Image.network(
           logo,
-          width: size.width * 0.2,
+          width: size.width * 0.25,
           height:100,
           fit: BoxFit.fitHeight,
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kick_start/providers/auth_provider.dart';
+import 'package:kick_start/providers/team_provider.dart';
 import 'package:kick_start/screens/auth_screen.dart';
 import 'package:kick_start/screens/team_details.dart';
 import 'package:kick_start/screens/wrapper.dart';
@@ -39,6 +40,8 @@ class App extends StatelessWidget {
   final FixturesProvider _fixturesProvider = FixturesProvider();
   final ActiveFixtureProvider _activeFixtureProvider = ActiveFixtureProvider();
 
+  final TeamProvider _teamProvider = TeamProvider();
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -68,6 +71,9 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           builder: (_) => _activeFixtureProvider,
+        ),
+        ChangeNotifierProvider(
+          builder: (_) => _teamProvider,
         ),
       ],
       child: MaterialApp(

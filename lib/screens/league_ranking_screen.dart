@@ -64,7 +64,7 @@ class _LeagueRankingScreenState extends State<LeagueRankingScreen> {
         onTap: () {
           Navigator.of(context).pushNamed(
             TeamDetails.routeName,
-            arguments: _standingsProvider.standings[0].teamId,
+            arguments: {'teamID':_standingsProvider.standings[0].teamId, 'leagueID':widget.leagueId},
           );
         },
         child: Material(

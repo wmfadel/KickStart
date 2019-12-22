@@ -30,7 +30,6 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
 
   FixturesProvider _fixturesProvider;
 
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -48,7 +47,7 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
 
     // creating streams for fixtures
     _fixturesProvider = FixturesProvider();
-      _fixturesProvider.getPeriodicStream(_leaagueId);
+    _fixturesProvider.getPeriodicStream(_leaagueId);
   }
 
   @override
@@ -56,16 +55,17 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
     super.dispose();
     _fixturesProvider.stopFetchingFixtures();
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: ()async{
+      onWillPop: () async {
         _fixturesProvider.stopFetchingFixtures();
         return true;
       },
       child: ChangeNotifierProvider(
-        builder: (_) =>_fixturesProvider,
-        child:  Scaffold(
+        builder: (_) => _fixturesProvider,
+        child: Scaffold(
           body: PageStorage(
             bucket: storageBucket,
             child: currentPage,
@@ -83,7 +83,7 @@ class _LeagueDetailsScreenState extends State<LeagueDetailsScreen> {
               BottomNavigationBarItem(
                 backgroundColor: Colors.deepOrange,
                 icon: Icon(Icons.supervisor_account),
-                title: Text('Ttop scorers'),
+                title: Text('Top scorers'),
               ),
               BottomNavigationBarItem(
                 backgroundColor: Colors.deepOrange,
