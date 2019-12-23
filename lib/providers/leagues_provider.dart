@@ -12,29 +12,15 @@ import '../models/country.dart';
 class LeaguesProvider with ChangeNotifier {
   List<League> _leagues = [];
 
-  // this will get wrong results for most of the year
-  int _season = DateTime.now().year;
-
   List<League> get leagues => [..._leagues];
 
-  _fetchCurrentSeason() async {
-    http.Response response = await http.get(Environment.seasonUrl,
-        headers: Environment.requestHeaders);
-    Map<String, dynamic> res = json.decode(response.body);
-    if (res['api']['results'].length < 1) {
-      _season = DateTime.now().year;
-    } else {
-      List<int> _seasons = res['api']['seasons'];
-      _season = _seasons[_seasons.length - 1];
-    }
-  }
 
-  Future<List<League>> fetchLeaguesByCountry(Country country) async {
+  Future<List<League>> fetchLeaguesByCountry(Country country, int season) async {
     // check if we have the current season
     // if (_season == null) await _fetchCurrentSeason();
 
     http.Response response = await http.get(
-        Environment.leaguesUrl + '${country.code}/$_season',
+        Environment.leaguesUrl + '${country.code??country.country}/$season',
         headers: Environment.requestHeaders);
     Map<String, dynamic> res = json.decode(response.body);
     List<League> _fetchedLeagues = [];
@@ -43,6 +29,9 @@ class LeaguesProvider with ChangeNotifier {
     }
     return _fetchedLeagues;
   }
+
+
+    
 
   addLeagueToFavorite(League league) {
     _leagues.add(league);

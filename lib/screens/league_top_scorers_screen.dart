@@ -181,6 +181,7 @@ class _LeagueTopScorersScreenState extends State<LeagueTopScorersScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                
                 Container(
                   width: 35,
                   height: 35,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kick_start/models/country.dart';
 import 'package:kick_start/models/league.dart';
 import 'package:kick_start/widgets/league_item.dart';
 import '../providers/countries_provider.dart';
@@ -17,6 +18,8 @@ class _PickLeagueScreenState extends State<PickLeagueScreen> {
   LeaguesProvider _leaguesProvider;
   String selectedCountryCode;
   Future<List<League>> leagueFuture;
+  int currentSeason = DateTime.now().year;
+  Country _selectedCountry;
 
   @override
   void didChangeDependencies() {
@@ -25,9 +28,12 @@ class _PickLeagueScreenState extends State<PickLeagueScreen> {
     _countriesProvider = Provider.of<CountriesProvider>(context, listen: false);
     _leaguesProvider = Provider.of<LeaguesProvider>(context, listen: false);
     selectedCountryCode = ModalRoute.of(context).settings.arguments as String;
-    if (leagueFuture == null)
+    if (leagueFuture == null) {
+      _selectedCountry =
+          _countriesProvider.getCountryByCode(selectedCountryCode);
       leagueFuture = _leaguesProvider.fetchLeaguesByCountry(
-          _countriesProvider.getCountryByCode(selectedCountryCode));
+          _selectedCountry, currentSeason);
+    }
   }
 
   @override
@@ -46,18 +52,94 @@ class _PickLeagueScreenState extends State<PickLeagueScreen> {
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: leagueFuture,
-        builder: (BuildContext context, AsyncSnapshot<List<League>> snapshot) {
-          return snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData
-              ? ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context, int index) =>
-                      LeagueItem(snapshot.data[index], isSelecting: true,),
-                )
-              : Center(child: CircularProgressIndicator());
-        },
+      body: ListView(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+            child: Material(
+              color: Colors.white,
+              elevation: 10,
+              borderRadius: BorderRadius.circular(25),
+              clipBehavior: Clip.hardEdge,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 70,
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            currentSeason--;
+                            leagueFuture =
+                                _leaguesProvider.fetchLeaguesByCountry(
+                                    _selectedCountry, currentSeason);
+                          });
+                        },
+                        icon: Icon(
+                          Icons.remove,
+                        )),
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          'season',
+                          style: TextStyle(
+                              fontSize: 20,
+                             ),
+                        ),
+                        Text(
+                          '$currentSeason',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 23,),
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            currentSeason++;
+                            leagueFuture =
+                                _leaguesProvider.fetchLeaguesByCountry(
+                                    _selectedCountry, currentSeason);
+                          });
+                        },
+                        icon: Icon(
+                          Icons.add,
+                        )),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height - 100,
+            child: FutureBuilder(
+              future: leagueFuture,
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<League>> snapshot) {
+                return snapshot.connectionState == ConnectionState.done &&
+                        snapshot.hasData
+                    ? snapshot.data.length < 1
+                        ? Center(
+                            child: Text('This Season is not available now.'),
+                          )
+                        : ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (BuildContext context, int index) =>
+                                LeagueItem(
+                              snapshot.data[index],
+                              isSelecting: true,
+                            ),
+                          )
+                    : Center(child: CircularProgressIndicator());
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

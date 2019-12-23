@@ -32,8 +32,15 @@ class StandingsProvider with ChangeNotifier {
   }
 
   String getTamFlagById(int teamId) {
-    String flag;
-    flag = _standings.firstWhere((Standings s) => s.teamId == teamId).logo;
+    String flag = '';
+    bool complete = false;
+
+    _standings.forEach((Standings s) {
+      if (s.teamId == teamId) complete = true;
+    });
+    if (complete)
+      flag = _standings.firstWhere((Standings s) => s.teamId == teamId).logo;
+
     return flag;
   }
 }

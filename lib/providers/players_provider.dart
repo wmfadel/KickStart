@@ -24,6 +24,7 @@ class PlayersProvider with ChangeNotifier{
     final String url = '${Environment.topScorersUrl}/$leagueId';
     http.Response response = await http.get(url, headers: Environment.requestHeaders);
 
+
     Map<String, dynamic> res = json.decode(response.body);
     if(res['api']['results'] < 1) return false;
     _topScorers.clear();
