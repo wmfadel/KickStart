@@ -3,7 +3,7 @@ import 'package:kick_start/providers/team_provider.dart';
 import 'package:kick_start/widgets/team_coaches.dart';
 import 'package:kick_start/widgets/team_squad.dart';
 import 'package:kick_start/widgets/team_stats.dart';
-import 'package:kick_start/widgets/team_transferes.dart';
+import 'package:kick_start/widgets/team_transfers.dart';
 import 'package:provider/provider.dart';
 
 class TeamDetails extends StatefulWidget {
@@ -24,7 +24,7 @@ class _TeamDetailsState extends State<TeamDetails> {
   Widget currentPage;
   TeamStats teamStats;
   TeamSquad teamSquad;
-  TeamTransferes teamTransferes;
+  TeamTransfers teamTransfers;
   TeamCoaches teamCoaches;
   List<Widget> pages;
 
@@ -39,9 +39,9 @@ class _TeamDetailsState extends State<TeamDetails> {
 
     teamStats = TeamStats(keyOne);
     teamSquad = TeamSquad(keyTwo);
-    teamTransferes = TeamTransferes(keyThree);
+    teamTransfers = TeamTransfers(keyThree);
     teamCoaches = TeamCoaches(keyFour);
-    pages = [teamStats, teamSquad, teamTransferes, teamCoaches];
+    pages = [teamStats, teamSquad, teamTransfers, teamCoaches];
     currentPage = pages[_navigationIndex];
 
     _teamProvider = Provider.of<TeamProvider>(context);

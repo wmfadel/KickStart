@@ -21,11 +21,14 @@ class _PickCountryScreenState extends State<PickCountryScreen> {
   LeaguesProvider _leaguesProvider;
   Future countriesFuture;
   bool param;
+  bool shoyldLoad = true;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _countriesProvider = Provider.of<CountriesProvider>(context, listen: false);
+   
+   if(shoyldLoad){
+      _countriesProvider = Provider.of<CountriesProvider>(context, listen: false);
     _leaguesProvider = Provider.of<LeaguesProvider>(context, listen: false);
 
     if (_countriesProvider.allCountries.length < 1) {
@@ -35,6 +38,8 @@ class _PickCountryScreenState extends State<PickCountryScreen> {
         param = ModalRoute.of(context).settings.arguments as bool;
       if (param != null && param) countriesFuture = Future.value(true);
     }
+   }
+   shoyldLoad = false;
   }
 
   @override

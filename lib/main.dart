@@ -14,7 +14,6 @@ import './providers/players_provider.dart';
 import './providers/standings_provider.dart';
 import './providers/fixtures_provider.dart';
 
-
 import './screens/pick_country_screen.dart';
 import './screens/pick_league_screen.dart';
 import './screens/home_screen.dart';
@@ -27,7 +26,7 @@ void main() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
- // WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
   runApp(App());
 }
 
@@ -60,7 +59,7 @@ class App extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<StandingsProvider, PlayersProvider>(builder:
             (BuildContext context, StandingsProvider standingsProvider,
-            PlayersProvider oldPlayersProvider) {
+                PlayersProvider oldPlayersProvider) {
           return PlayersProvider(
               oldPlayersProvider == null ? [] : oldPlayersProvider.topScorers,
               standingsProvider.fetchStandingsForLeague,
