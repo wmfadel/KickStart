@@ -39,7 +39,7 @@ class _TeamDetailsState extends State<TeamDetails> {
 
     teamStats = TeamStats(keyOne);
     teamSquad = TeamSquad(keyTwo);
-    teamTransfers = TeamTransfers(keyThree);
+    teamTransfers = TeamTransfers(keyThree, params['teamID']);
     teamCoaches = TeamCoaches(keyFour);
     pages = [teamStats, teamSquad, teamTransfers, teamCoaches];
     currentPage = pages[_navigationIndex];

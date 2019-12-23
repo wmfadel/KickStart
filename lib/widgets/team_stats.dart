@@ -83,7 +83,7 @@ class TeamStats extends StatelessWidget {
             SizedBox(height: 8),
             Text(
               'Venue',
-              style: TextStyle(color: Colors.black, fontSize: 25),
+              style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
             Text(

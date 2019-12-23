@@ -90,7 +90,7 @@ class TeamProvider with ChangeNotifier {
         await http.get(url, headers: Environment.requestHeaders);
     Map<String, dynamic> res = json.decode(response.body);
     if (res['api']['results'] < 1) {
-      _squadSubject.addError('Cannot squad for this season 😿');
+      _squadSubject.addError('Cannot find squad for this season 😿');
       return;
     }
     List<Player> players = [];
@@ -107,7 +107,7 @@ class TeamProvider with ChangeNotifier {
         await http.get(url, headers: Environment.requestHeaders);
     Map<String, dynamic> res = json.decode(response.body);
     if (res['api']['results'] < 1) {
-      _squadSubject.addError('No transsfers for this team');
+      _squadSubject.addError('No transfers for this team');
       return;
     }
     List<Transfer> transfers = [];
