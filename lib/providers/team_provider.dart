@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:kick_start/environment.dart';
+
+import 'package:kick_start/models/coach.dart';
 import 'package:kick_start/models/player.dart';
 import 'package:kick_start/models/team.dart';
+
 import 'package:kick_start/models/team_statistics.dart';
 import 'package:kick_start/models/transfer.dart';
+import 'package:kick_start/models/trophie.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,6 +28,12 @@ class TeamProvider with ChangeNotifier {
   BehaviorSubject<List<Transfer>> _transfersSubject = BehaviorSubject();
   Stream<List<Transfer>> get transfersStream => _transfersSubject.stream;
 
+  BehaviorSubject<List<Coach>> coachsSubject = BehaviorSubject();
+  Stream<List<Coach>> get coachsStream => coachsSubject.stream;
+
+  BehaviorSubject<List<Trophie>> _trophieSubject = BehaviorSubject();
+  Stream<List<Trophie>> get trophieStream => _trophieSubject.stream;
+
   TeamProvider() {
     teamStream.listen((value) {
       // we have team start fetching all its data
@@ -31,7 +41,12 @@ class TeamProvider with ChangeNotifier {
         fetchTeamSttistics();
         fetchSquad();
         fetchTransfers();
+        fetchCoachs();
       }
+    });
+
+    coachsStream.listen((List<Coach> coaches) {
+      fetchCoachTrophies(coaches[0].id);
     });
   }
 
@@ -42,6 +57,8 @@ class TeamProvider with ChangeNotifier {
     _teamStatisticsSubject.add(null);
     _squadSubject.add(null);
     _transfersSubject.add(null);
+    coachsSubject.add(null);
+    _trophieSubject.add(null);
   }
 
   fetchTeam(int teamId, int leagueId) async {
@@ -115,5 +132,39 @@ class TeamProvider with ChangeNotifier {
       transfers.add(Transfer.fromJson(transfer));
     }
     _transfersSubject.add(transfers);
+  }
+
+  fetchCoachs() async {
+    String url = Environment.coachUrl + '/$teamID';
+
+    http.Response response =
+        await http.get(url, headers: Environment.requestHeaders);
+    Map<String, dynamic> res = json.decode(response.body);
+    if (res['api']['results'] < 1) {
+      _squadSubject.addError('Cannot find Coachs for this team');
+      return;
+    }
+    List<Coach> coachs = [];
+    for (var coach in res['api']['coachs']) {
+      coachs.add(Coach.fromJson(coach));
+    }
+    coachsSubject.add(coachs);
+  }
+
+  fetchCoachTrophies(int id) async {
+    String url = Environment.coacTrophieshUrl + '/$id';
+
+    http.Response response =
+        await http.get(url, headers: Environment.requestHeaders);
+    Map<String, dynamic> res = json.decode(response.body);
+    if (res['api']['results'] < 1) {
+      _squadSubject.addError('Cannot find Coach Trophies');
+      return;
+    }
+    List<Trophie> trophies = [];
+    for (var trophie in res['api']['trophies']) {
+      trophies.add(Trophie.fromJson(trophie));
+    }
+    _trophieSubject.add(trophies);
   }
 } // end of class
