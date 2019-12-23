@@ -14,7 +14,7 @@ class TeamSquad extends StatelessWidget {
     return StreamBuilder<List<Player>>(
       stream: Provider.of<TeamProvider>(context).squadStream,
       builder: (BuildContext context, AsyncSnapshot<List<Player>> snapshot) {
-        if (snapshot.hasError) return FlareErrorWidget(snapshot.error);
+        if (snapshot.hasError) return Center(child: FlareErrorWidget(snapshot.error));
         if (snapshot.hasData && snapshot.data != null) {
           return ListView.builder(
             itemCount: snapshot.data.length,
