@@ -4,7 +4,17 @@
 
 * if you want to use the code for any reason you can download the source code and follow the instructions in the files for adding your API key and start using the application
 
-* Screenshots from the application
+
+
+
+
+* A video for the application [here](https://youtu.be/52V7N15VeQY).
+* download APK [here](https://github.com/wmfadel/KickStart/blob/master/app-release.apk)
+
+
+
+
+## Screenshots from the application
 
 
 
