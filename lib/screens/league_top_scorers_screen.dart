@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kick_start/models/scorer.dart';
 import 'package:kick_start/providers/players_provider.dart';
 import 'package:kick_start/providers/standings_provider.dart';
+import 'package:kick_start/screens/player_details.dart';
 import 'package:kick_start/widgets/flare_error_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +16,6 @@ class LeagueTopScorersScreen extends StatefulWidget {
 }
 
 class _LeagueTopScorersScreenState extends State<LeagueTopScorersScreen> {
-
   StandingsProvider _standingsProvider;
   PlayersProvider _playersProvider;
 
@@ -106,14 +106,22 @@ class _LeagueTopScorersScreenState extends State<LeagueTopScorersScreen> {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(25, 0, 8, 8),
-                          child: Text(
-                            _playersProvider.topScorers[0].playerName,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold),
+                        GestureDetector(
+                          onTap: () {
+                          /*  Navigator.of(context).pushNamed(
+                                PlayerDetails.routeName,
+                                arguments:
+                                    _playersProvider.topScorers[0].playerId);*/
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(25, 0, 8, 8),
+                            child: Text(
+                              _playersProvider.topScorers[0].playerName,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                         Padding(
@@ -171,49 +179,53 @@ class _LeagueTopScorersScreenState extends State<LeagueTopScorersScreen> {
       ],
       rows: _playersProvider.topScorers.map((Scorer scorer) {
         rank++;
-        return DataRow(cells: [
-          DataCell(Text(
-            '$rank',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          )),
-          DataCell(Text('${scorer.playerName}')),
-          DataCell(FittedBox(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                
-                Container(
-                  width: 35,
-                  height: 35,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: NetworkImage(
-                          _standingsProvider.getTamFlagById(scorer.teamId)),
+        return DataRow(
+          cells: [
+            DataCell(Text(
+              '$rank',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            )),
+            DataCell(Text('${scorer.playerName}'), onTap: () {
+           /*   Navigator.of(context).pushNamed(PlayerDetails.routeName,
+                  arguments: scorer.playerId);*/
+            }),
+            DataCell(FittedBox(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    width: 35,
+                    height: 35,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            _standingsProvider.getTamFlagById(scorer.teamId)),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(width: 5),
-                Text(scorer.teamName),
-              ],
-            ),
-          )),
-          DataCell(Text('${scorer.position}')),
-          DataCell(Text('${scorer.games.appearences ?? 0}')),
-          DataCell(Text('${scorer.games.minutesPlayed ?? 0}')),
-          DataCell(Text('${scorer.goals.total ?? 0}')),
-          DataCell(Text('${scorer.goals.assists ?? 0}')),
-          DataCell(Text('${scorer.shots.total ?? 0}')),
-          DataCell(Text('${scorer.shots.on ?? 0}')),
-          DataCell(Text('${scorer.penalty.won ?? 0}')),
-          DataCell(Text('${scorer.penalty.commited ?? 0}')),
-          DataCell(Text('${scorer.penalty.missed ?? 0}')),
-          DataCell(Text('${scorer.penalty.saved ?? 0}')),
-          DataCell(buildCard(scorer.cards.yellow ?? 0, Colors.yellow)),
-          DataCell(buildCard(scorer.cards.secondYellow ?? 0, Colors.yellow)),
-          DataCell(buildCard(scorer.cards.red ?? 0, Colors.red)),
-          DataCell(Text(scorer.nationality)),
-        ]);
+                  SizedBox(width: 5),
+                  Text(scorer.teamName),
+                ],
+              ),
+            )),
+            DataCell(Text('${scorer.position}')),
+            DataCell(Text('${scorer.games.appearences ?? 0}')),
+            DataCell(Text('${scorer.games.minutesPlayed ?? 0}')),
+            DataCell(Text('${scorer.goals.total ?? 0}')),
+            DataCell(Text('${scorer.goals.assists ?? 0}')),
+            DataCell(Text('${scorer.shots.total ?? 0}')),
+            DataCell(Text('${scorer.shots.on ?? 0}')),
+            DataCell(Text('${scorer.penalty.won ?? 0}')),
+            DataCell(Text('${scorer.penalty.commited ?? 0}')),
+            DataCell(Text('${scorer.penalty.missed ?? 0}')),
+            DataCell(Text('${scorer.penalty.saved ?? 0}')),
+            DataCell(buildCard(scorer.cards.yellow ?? 0, Colors.yellow)),
+            DataCell(buildCard(scorer.cards.secondYellow ?? 0, Colors.yellow)),
+            DataCell(buildCard(scorer.cards.red ?? 0, Colors.red)),
+            DataCell(Text(scorer.nationality)),
+          ],
+        );
       }).toList(),
     );
   }

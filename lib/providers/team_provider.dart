@@ -46,7 +46,8 @@ class TeamProvider with ChangeNotifier {
     });
 
     coachsStream.listen((List<Coach> coaches) {
-      fetchCoachTrophies(coaches[0].id);
+      if (coaches != null && coaches.length > 0)
+        fetchCoachTrophies(coaches[0].id);
     });
   }
 

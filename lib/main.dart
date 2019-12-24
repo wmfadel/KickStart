@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:kick_start/providers/auth_provider.dart';
 import 'package:kick_start/providers/team_provider.dart';
 import 'package:kick_start/screens/auth_screen.dart';
+import 'package:kick_start/screens/player_details.dart';
 import 'package:kick_start/screens/team_details.dart';
 import 'package:kick_start/screens/wrapper.dart';
 import 'package:provider/provider.dart';
@@ -22,10 +23,10 @@ import './screens/league_details_screen.dart';
 
 void main() {
   // Provider.debugCheckInvalidValueType = null;
-  SystemChrome.setPreferredOrientations([
+ /* SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]);
+  ]);*/
   // WidgetsFlutterBinding.ensureInitialized();
   runApp(App());
 }
@@ -105,6 +106,7 @@ class App extends StatelessWidget {
           LeagueDetailsScreen.routeName: (context) => LeagueDetailsScreen(),
           FixtureDetails.routeName: (context) => FixtureDetails(),
           TeamDetails.routeName: (context) => TeamDetails(),
+          PlayerDetails.routeName: (context) => PlayerDetails(),
         },
       ),
     );

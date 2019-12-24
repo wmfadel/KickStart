@@ -48,7 +48,7 @@ class TransferItem extends StatelessWidget {
                 children: <Widget>[
                   Image.network(
                     'https://media.api-football.com/teams/${transfer.teamIn.teamId}.png',
-                    height: 100,
+                    height: 95,
                     fit: BoxFit.fitHeight,
                   ),
                   Icon(
@@ -60,7 +60,7 @@ class TransferItem extends StatelessWidget {
                   ),
                   Image.network(
                     'https://media.api-football.com/teams/${transfer.teamOut.teamId}.png',
-                    height: 100,
+                    height: 95,
                     fit: BoxFit.fitHeight,
                   ),
                 ],

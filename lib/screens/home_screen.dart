@@ -29,6 +29,7 @@ class HomePage extends StatelessWidget {
            if(_authProvider.userType != UserType.Anonymous)
               _authProvider.signOut();
            _authProvider.userType = null;
+           _leagueProvider.flushLeagues();
            Navigator.of(context)
                .pushNamedAndRemoveUntil(AuthScreen.routeName, (Route<dynamic> route) => false);
          },
