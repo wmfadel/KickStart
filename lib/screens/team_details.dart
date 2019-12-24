@@ -35,8 +35,6 @@ class _TeamDetailsState extends State<TeamDetails> {
     Map<String, dynamic> params = ModalRoute.of(context).settings.arguments;
     if (params == null) Navigator.of(context).pop();
 
-    print(params.toString());
-
     teamStats = TeamStats(keyOne);
     teamSquad = TeamSquad(keyTwo);
     teamTransfers = TeamTransfers(keyThree, params['teamID']);

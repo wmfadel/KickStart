@@ -46,7 +46,7 @@ class TeamStats extends StatelessWidget {
 
             // Logo and name row
             Padding(
-              padding: const EdgeInsets.only(top: 50, left: 8),
+              padding: const EdgeInsets.only(top: 50),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,6 +64,7 @@ class TeamStats extends StatelessWidget {
                     children: <Widget>[
                       SizedBox(height: 30),
                       Text(team.name,
+                      overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 30,

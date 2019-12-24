@@ -84,17 +84,22 @@ class _PickLeagueScreenState extends State<PickLeagueScreen> {
                         )),
                     Column(
                       children: <Widget>[
-                        Text(
-                          'season',
-                          style: TextStyle(
-                              fontSize: 20,
-                             ),
+                        FittedBox(
+                          child: Text(
+                            'season',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
                         ),
-                        Text(
-                          '$currentSeason',
-                          style: TextStyle(
+                        FittedBox(
+                          child: Text(
+                            '$currentSeason',
+                            style: TextStyle(
                               color: Colors.black,
-                              fontSize: 23,),
+                              fontSize: 20,
+                            ),
+                          ),
                         ),
                       ],
                     ),
