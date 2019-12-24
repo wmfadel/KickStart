@@ -1,5 +1,4 @@
-# kick_start
-
+# FB
 * A flutter application for the world footbal leagues buit using - [api-football](https://www.api-football.com/)  API.
 - in this application you can select leagues from any country that you are interested in and follow its fixtures, results, league standings and top scorrers and alot more.
 
@@ -13,6 +12,21 @@
 
 - Home screen: view your leagues, logut, edit your leagues
 <img src=https://github.com/wmfadel/KickStart/blob/master/screenshots/Screenshot_20191224-160103.jpg width="280"/>
+
+
+
+
+- Pick countries screen: contains all the countries available in the application to select from them.
+
+<img src=https://github.com/wmfadel/KickStart/blob/master/screenshots/Screenshot_20191224-162758.jpg width="280"/>
+
+
+
+
+
+- Select League page: contains all the leagues available in the country to select from and you can switch between season to follow a league from old or new season as long as its available in the API, you can add he same league to your followed leagues from different seasons and use them seperately.
+
+<img src=https://github.com/wmfadel/KickStart/blob/master/screenshots/Screenshot_20191224-162808.jpg width="280"/>
 
 
 
