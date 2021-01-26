@@ -9,7 +9,6 @@
 
 
 * A video for the application [here](https://youtu.be/52V7N15VeQY).
-* download APK [here](https://github.com/wmfadel/KickStart/blob/master/app-release.apk)
 
 
 
